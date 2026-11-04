@@ -5,65 +5,76 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Le jeu du dieu</title>
 <style>
-:root{--bg:#14161c;--card:#1e2129;--line:#2d313c;--ink:#ecebe4;--quiet:#9a9c9a;--gold:#e0b45c;--good:#6fbf73;--bad:#d96b5c;--blue:#6ca0d6}
+:root{--bg:#14161c;--card:#1e2129;--line:#2d313c;--ink:#ecebe4;--quiet:#9a9c9a;--gold:#e0b45c;--good:#6fbf73;--bad:#d96b5c;--blue:#6ca0d6;--violet:#b48be0}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 system-ui,-apple-system,sans-serif;padding-bottom:70px}
-header{padding:12px 14px 8px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:5}
+header{padding:10px 14px 8px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:5}
 header h1{margin:0;font-size:18px;display:flex;justify-content:space-between;align-items:baseline}
 header h1 small{font-size:11px;color:var(--quiet);font-weight:400}
-.stats{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
-.stat{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:4px 8px;font-size:13px;flex:1;text-align:center;min-width:70px}
+.stats{display:flex;gap:6px;margin-top:8px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:4px 6px;font-size:12px;flex:1;text-align:center}
 .stat b{display:block;font-size:17px}
 .stat.gold b{color:var(--gold)}
 main{padding:14px}
 .tab{display:none}.tab.on{display:block}
-nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
-nav button{flex:1;background:none;border:0;color:var(--quiet);padding:10px 2px 8px;font-size:12px}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);z-index:6}
+nav button{flex:1;background:none;border:0;color:var(--quiet);padding:10px 2px 8px;font-size:12px;position:relative}
 nav button.on{color:var(--gold)}
 nav button span{display:block;font-size:20px}
-nav button i{position:absolute;margin-left:4px;margin-top:-4px;background:var(--bad);color:#fff;border-radius:10px;font-size:10px;font-style:normal;padding:0 5px}
+nav button i{position:absolute;top:6px;right:14px;background:var(--bad);color:#fff;border-radius:10px;font-size:10px;font-style:normal;padding:0 5px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:12px;position:relative;transition:transform .25s,opacity .25s}
 .card.out-r{transform:translateX(120%) rotate(8deg);opacity:0}
 .card.out-l{transform:translateX(-120%) rotate(-8deg);opacity:0}
+.card.prophete{border-color:var(--gold)}
 .who{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.face{width:44px;height:44px;border-radius:50%;background:#2b3040;display:flex;align-items:center;justify-content:center;font-size:24px}
+.face{width:44px;height:44px;border-radius:50%;background:#2b3040;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
 .who b{display:block}.who small{color:var(--quiet);font-size:12px}
-.tagc{display:inline-block;font-size:11px;padding:1px 7px;border-radius:9px;background:#2b3040;color:var(--quiet);margin-left:6px}
+.tagc{display:inline-block;font-size:11px;padding:1px 7px;border-radius:9px;background:#2b3040;color:var(--quiet);margin-left:6px;font-weight:400}
 .tagc.conv{background:#3d3250;color:#d8b8ff}
+.tagc.pro{background:#4a3d1a;color:var(--gold)}
 .prayer{font-size:17px;font-style:italic;margin:6px 0 14px}
 .btns{display:flex;gap:10px}
 .btns button{flex:1;padding:12px;border-radius:10px;border:0;font-size:15px;font-weight:600}
 .yes{background:var(--gold);color:#1a1200}.no{background:#33363f;color:var(--ink)}
 .yes:disabled{opacity:.4}
 .cost{font-size:12px;color:var(--quiet);text-align:center;margin-top:8px}
-.empty{color:var(--quiet);text-align:center;padding:30px 10px}
-h2{font-size:15px;color:var(--quiet);margin:18px 0 8px;text-transform:uppercase;letter-spacing:.5px}
+.empty{color:var(--quiet);text-align:center;padding:30px 10px;line-height:1.5}
+h2{font-size:14px;color:var(--quiet);margin:18px 0 8px;text-transform:uppercase;letter-spacing:.5px}
 h2:first-child{margin-top:0}
 .gauge{margin-bottom:10px}
 .gauge div.lbl{display:flex;justify-content:space-between;font-size:14px}
 .bar{height:8px;background:#2b3040;border-radius:4px;overflow:hidden;margin-top:3px}
 .bar i{display:block;height:100%;background:var(--good)}
 .bar i.warn{background:var(--gold)}.bar i.bad{background:var(--bad)}
-.row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
+.row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--line);font-size:14px;gap:8px}
 .row small{color:var(--quiet);display:block;font-size:12px}
-.foi{font-size:12px;padding:2px 7px;border-radius:9px;background:#2b3040}
+.foi{font-size:12px;padding:2px 7px;border-radius:9px;background:#2b3040;white-space:nowrap}
 .foi.me{background:#4a3d1a;color:var(--gold)}
 .foi.doubt{background:#4a2a2a;color:#f0a0a0}
-.act{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:10px}
-.act b{display:block}.act small{color:var(--quiet);font-size:12px}
-.act button{background:var(--gold);color:#1a1200;border:0;border-radius:8px;padding:8px 12px;font-weight:600;white-space:nowrap}
+.act{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px}
+.act .top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.act b{display:block}.act small{color:var(--quiet);font-size:12px;display:block;margin-top:2px}
+.act button{background:var(--gold);color:#1a1200;border:0;border-radius:8px;padding:8px 12px;font-weight:600;white-space:nowrap;flex-shrink:0}
 .act button:disabled{background:#33363f;color:var(--quiet)}
+.cibles{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.cibles button{background:#2b3040;color:var(--ink);font-weight:400;font-size:13px;padding:6px 10px}
+.cibles button.on{background:var(--gold);color:#1a1200;font-weight:600}
 .log{font-size:14px;padding:6px 0;border-bottom:1px solid var(--line)}
-.log small{color:var(--quiet);margin-right:6px}
+.log small{color:var(--quiet);margin-right:6px;white-space:nowrap}
+.log.imp{color:var(--gold)}
 .setup{padding:20px 16px}
 .setup label{display:block;margin:14px 0 6px;color:var(--quiet);font-size:13px}
-.setup input,.setup select{width:100%;padding:10px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:16px}
+.setup input,.setup select,.sel{width:100%;padding:10px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:16px}
+.sel{font-size:14px;padding:8px;margin-top:8px}
 .setup .go{margin-top:24px;width:100%;padding:14px;background:var(--gold);border:0;border-radius:10px;font-size:17px;font-weight:600}
 .toast{position:fixed;left:50%;bottom:80px;transform:translateX(-50%);background:#2b3040;color:var(--ink);padding:10px 16px;border-radius:10px;font-size:14px;opacity:0;transition:opacity .3s;pointer-events:none;max-width:90%;text-align:center;z-index:9}
 .toast.on{opacity:1}
 .test{margin-top:24px;border-top:1px dashed var(--line);padding-top:12px;font-size:13px;color:var(--quiet)}
 .test button{background:#33363f;color:var(--ink);border:0;border-radius:8px;padding:8px 12px;margin:4px 4px 0 0}
-.sel{width:100%;padding:8px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:14px;margin-bottom:8px}
+.saison{font-size:12px;color:var(--quiet);margin-top:4px}
+.famille{margin-top:14px}
+.famille h3{font-size:14px;margin:0 0 4px;display:flex;justify-content:space-between}
+.famille h3 small{color:var(--quiet);font-weight:400}
 </style>
 </head>
 <body>
@@ -71,289 +82,364 @@ h2:first-child{margin-top:0}
 <div class="toast" id="toast"></div>
 <script>
 /* ============================================================
-   LE JEU DU DIEU — prototype v1 (hors ligne, un seul fichier)
-   Un jour de jeu = DAY_MS de temps réel. Tout est simulé.
+   LE JEU DU DIEU — prototype v2
+   Le monde vit par TRANCHES de 10 minutes réelles (6 par heure).
+   Un jour de jeu = 1 heure réelle = 6 tranches de 4 h de jeu.
    ============================================================ */
-const VERSION = 1;
-const DAY_MS = 60*60*1000;          // 1 jour de jeu = 1 heure réelle
-const SAVE_KEY = 'jeu-du-dieu-v1';
+const VERSION = 2;
+const TICK_MS = 10*60*1000;
+const TICKS_PAR_JOUR = 6;
+const SAVE_KEY = 'jeu-du-dieu-v2';
 
 const ELEMENTS = {eau:'Eau', feu:'Feu', terre:'Terre', vent:'Vent', lumiere:'Lumière', ombre:'Ombre'};
 const VALEURS  = {justice:'Justice', liberte:'Liberté', partage:'Partage', ambition:'Ambition', ordre:'Ordre', chaos:'Chaos'};
 const MANIERES = {doux:'Doux', brutal:'Brutal', visible:'Visible', discret:'Discret'};
 const COMMANDEMENTS = {justice:'Rends à chacun ce qui lui est dû.', liberte:'Que nul ne soit enchaîné.', partage:'Partage ta récolte avec ton voisin.', ambition:'Ne te contente jamais de ce que tu as.', ordre:'Respecte ta place et celle des autres.', chaos:'Ne suis aucune règle que la tienne.'};
+const SAISONS = [{n:'Printemps',k:1.1,e:'🌱'},{n:'Été',k:1.3,e:'☀️'},{n:'Automne',k:0.9,e:'🍂'},{n:'Hiver',k:0.45,e:'❄️'}];
+const JOURS_PAR_SAISON = 8;
 
-const PRENOMS = ['Marthe','Odile','Gaspard','Léon','Brune','Thibault','Aurèle','Mahaut','Colin','Sidonie','Baptiste','Rosalie','Anselme','Iris','Firmin','Jeanne','Ambroise','Lison','Barnabé','Hortense','Côme','Perrine','Eloi','Flavie'];
-const FAMILLES = ['Vauclair','Moreau','Dufresne','Lambert','Roussel','Garnier'];
-const METIERS  = ['fermier','pêcheur','boulanger','forgeron','soigneur','soldat','marchand','tisserand'];
-const EMOJI = {fermier:'🌾',pêcheur:'🎣',boulanger:'🍞',forgeron:'⚒️',soigneur:'🌿',soldat:'🛡️',marchand:'⚖️',tisserand:'🧵'};
+const PRENOMS = ['Marthe','Odile','Gaspard','Léon','Brune','Thibault','Aurèle','Mahaut','Colin','Sidonie','Baptiste','Rosalie','Anselme','Iris','Firmin','Jeanne','Ambroise','Lison','Barnabé','Hortense','Côme','Perrine','Eloi','Flavie','Armand','Blanche','Casimir','Delphine','Émile','Faustine','Gautier','Honorine','Isidore','Joséphine','Lazare','Marceline','Nestor','Ondine','Philibert','Quitterie','Rémi','Solange','Tancrède','Ursule','Victorin','Wilhelmine','Zéphyr','Agathe'];
+const FAMILLES = ['Vauclair','Moreau','Dufresne','Lambert','Roussel','Garnier','Perrault','Lenoir'];
+const METIERS  = ['fermier','pêcheur','boulanger','forgeron','soigneur','soldat','marchand','tisserand','bûcheron','berger'];
+const EMOJI = {fermier:'🌾',pêcheur:'🎣',boulanger:'🍞',forgeron:'⚒️',soigneur:'🌿',soldat:'🛡️',marchand:'⚖️',tisserand:'🧵',bûcheron:'🪓',berger:'🐑'};
+const PRODUCTEURS = ['fermier','pêcheur','boulanger','berger'];
 
-// Dieux PNJ déjà établis
 const DIEUX_PNJ = [
   {id:'ormund', nom:'Ormund', titre:'le Vieux Dieu des Moissons'},
   {id:'selune', nom:'Sélune', titre:'la Dame des Eaux Calmes'}
 ];
 
-// Besoins : coût pour exaucer, texte des prières
+// Besoins : coût pour exaucer, gain de foi, textes de prière
 const BESOINS = {
-  affame : {cout:3, foi:25, txt:['Mes enfants ont faim, le grenier est vide.','Trois jours sans pain. Entends-moi.','La soupe est claire comme l\'eau, aide-nous.']},
-  malade : {cout:4, foi:30, txt:['La fièvre ne me lâche plus, guéris-moi.','Je tousse du sang depuis l\'aube.','Mon fils brûle de fièvre, sauve-le.']},
-  menace : {cout:6, foi:30, txt:['La bête rôde près de ma ferme, protège-nous.','On a entendu hurler dans la nuit. J\'ai peur.','Mes bêtes ont été égorgées. Qui sera le prochain ?']},
-  pauvre : {cout:3, foi:20, txt:['Je n\'ai plus de quoi acheter de graines.','Les dettes m\'étranglent, donne-moi un signe.','Mon échoppe est vide, personne n\'achète plus.']},
-  petite : {cout:1, foi:12, txt:['Mon toit fuit, fais-moi une nuit sans pluie.','Ma fille se marie demain, bénis-la.','Mon four est éteint depuis trois jours.','J\'ai perdu ma bague de mariage, aide-moi à la retrouver.','Donne-moi le courage de parler à mon voisin.','Fais que mon pain lève bien demain.']}
+  affame : {cout:3, foi:25, nom:'a faim',    txt:['Mes enfants ont faim, le grenier est vide.','Trois jours sans pain. Entends-moi.','La soupe est claire comme l\'eau, aide-nous.']},
+  malade : {cout:4, foi:30, nom:'malade',    txt:['La fièvre ne me lâche plus, guéris-moi.','Je tousse du sang depuis l\'aube.','Mon fils brûle de fièvre, sauve-le.']},
+  blesse : {cout:3, foi:25, nom:'blessé·e',  txt:['Ma main est ouverte jusqu\'à l\'os. Referme-la.','Je suis tombé du toit, je ne peux plus marcher.','La hache a glissé. Je saigne.']},
+  menace : {cout:6, foi:30, nom:'menacé·e',  txt:['La bête rôde près de ma ferme, protège-nous.','On a entendu hurler dans la nuit. J\'ai peur.','Mes bêtes ont été égorgées. Qui sera le prochain ?']},
+  querelle:{cout:3, foi:20, nom:'en querelle',txt:['Les {fam} nous cherchent noise. Apaise-les, ou donne-moi la force.','Mon voisin a déplacé la borne de mon champ. Rends-moi justice.','Il y a eu des coups sur la place. Fais cesser ça.']},
+  pauvre : {cout:3, foi:20, nom:'ruiné·e',   txt:['Je n\'ai plus de quoi acheter de graines.','Les dettes m\'étranglent, donne-moi un signe.','Mon échoppe est vide, personne n\'achète plus.']},
+  deuil  : {cout:2, foi:20, nom:'en deuil',  txt:['Nous avons enterré {mort} ce matin. Pourquoi ?','La maison est vide sans {mort}. Donne-moi un signe.']},
+  petite : {cout:1, foi:12, nom:'',          txt:['Mon toit fuit, fais-moi une nuit sans pluie.','Ma fille se marie demain, bénis-la.','Mon four est éteint depuis trois jours.','J\'ai perdu ma bague, aide-moi à la retrouver.','Donne-moi le courage de parler à ma voisine.','Fais que mon pain lève bien demain.','Ma vache ne donne plus de lait.','Je n\'arrive plus à dormir. Apaise-moi.']},
+  reve   : {cout:2, foi:20, nom:'',          txt:['J\'ai rêvé d\'un nom que je ne connais pas. Est-ce toi ?','Une voix m\'a parlé cette nuit. Si c\'est toi, montre-le.','Je ne sais plus à qui prier. Es-tu là ?']}
 };
 
-let S = null;   // état du jeu
+let S = null;
 let tab = 'prieres';
+let cibleChoisie = {};   // action id -> cible choisie dans l'onglet Actions
 
 /* ---------- utilitaires ---------- */
 const rnd = n => Math.floor(Math.random()*n);
-const pick = a => a[rnd(a.length)];
+const pick = a => a.length ? a[rnd(a.length)] : null;
 const clamp = (v,a,b)=>Math.max(a,Math.min(b,v));
 const shuffle = a => {for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]]}return a};
-function toast(t){const e=document.getElementById('toast');e.textContent=t;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('on'),2200)}
+function toast(t){const e=document.getElementById('toast');e.textContent=t;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('on'),2400)}
 function save(){localStorage.setItem(SAVE_KEY, JSON.stringify(S))}
-function log(t){S.chronique.unshift({j:S.jour, t}); if(S.chronique.length>80) S.chronique.length=80}
+function heure(){return (S.tick%TICKS_PAR_JOUR)*4}
+function quand(){return `J${S.jour} · ${String(heure()).padStart(2,'0')}h`}
+function log(t,imp){S.chronique.unshift({q:quand(), t, imp:!!imp}); if(S.chronique.length>120) S.chronique.length=120}
+const nomH = h => `${h.prenom} ${h.famille}`;
+const saison = () => SAISONS[Math.floor((S.jour-1)/JOURS_PAR_SAISON)%4];
 
 /* ---------- création du monde ---------- */
+function nouvelHabitant(fam, dieu, prenoms){
+  return {id:0, prenom:(prenoms||shuffle([...PRENOMS])).pop(), famille:fam, metier:pick(METIERS),
+    dieu, foi:35+rnd(50), besoin:null, besoinDepuis:0, connait:{}, priePas:0, protege:0, prophete:false};
+}
 function nouveauMonde(dieu){
   const habs=[]; const prenoms=shuffle([...PRENOMS]);
-  FAMILLES.forEach((fam,fi)=>{
-    for(let k=0;k<4;k++){
-      habs.push({id:habs.length, prenom:prenoms.pop(), famille:fam, metier:pick(METIERS),
-        dieu: fi<4?'ormund':'selune', foi:40+rnd(45), besoin:null, besoinDepuis:0,
-        connait:{}, priePas:0});
-    }
-  });
-  // Au moins un fermier, un soigneur, un soldat
-  habs[0].metier='fermier'; habs[1].metier='soigneur'; habs[2].metier='soldat'; habs[3].metier='fermier'; habs[4].metier='pêcheur'; habs[5].metier='boulanger';
-  // Le premier croyant : un douteur déçu
-  const d = pick(habs.filter(h=>h.dieu==='ormund'));
-  d.dieu='joueur'; d.foi=55; d.connait.joueur=true;
-  habs.filter(h=>h.famille===d.famille).forEach(h=>h.connait.joueur=true);
+  FAMILLES.forEach((fam,fi)=>{ for(let k=0;k<5;k++) habs.push(nouvelHabitant(fam, fi<5?'ormund':'selune', prenoms)); });
+  // garantir les métiers vitaux
+  ['fermier','fermier','fermier','pêcheur','boulanger','berger','soigneur','soigneur','soldat','soldat','forgeron','marchand'].forEach((m,i)=>habs[i*3%habs.length].metier=m);
+  habs.forEach((h,i)=>h.id=i);
+  // le prophète : un douteur d'Ormund
+  const p = pick(habs.filter(h=>h.dieu==='ormund'));
+  p.dieu='joueur'; p.foi=60; p.prophete=true; p.connait.joueur=true;
 
-  S = {version:VERSION, jour:1, derniereMaj:Date.now(), dieu,
-    pouvoir:5, caractere:0, oeuvres:{autel:0,temple:0,prophete:0},
-    village:{stock:50, richesse:40, bete:0, pop:habs.length},
-    habs, cartes:[], chronique:[], gagne:0};
-  log(`${d.prenom} ${d.famille}, déçu·e par Ormund, a murmuré ton nom pour la première fois. Tu existes.`);
-  log(`Le village compte ${habs.length} âmes. Ormund et Sélune règnent depuis des générations.`);
-  genererPrieres();
+  S = {version:VERSION, jour:1, tick:0, derniereMaj:Date.now(), dieu,
+    pouvoir:8, pouvoirFrac:0, caractere:0, oeuvres:{autel:0,temple:0,prophete:1},
+    village:{stock:90, richesse:45, bete:0, conflit:null, conflitJours:0},
+    habs, cartes:[], chronique:[], tuto:0, morts:0};
+  log(`${nomH(p)}, déçu·e par Ormund, a murmuré ton nom pour la première fois. Tu existes.`, true);
+  log(`Le village compte ${habs.length} âmes en ${FAMILLES.length} familles. Ormund et Sélune règnent depuis des générations.`);
+  carteTuto();
   save();
 }
 
 /* ---------- lectures ---------- */
 const croyants = () => S.habs.filter(h=>h.dieu==='joueur');
+const prophete = () => S.habs.find(h=>h.prophete);
 const ferveur = () => { const c=croyants(); return c.length? Math.round(c.reduce((a,h)=>a+h.foi,0)/c.length) : 0 };
 const renommee = () => Math.round(100*S.habs.filter(h=>h.connait.joueur).length/S.habs.length);
-const prod = () => S.habs.filter(h=>['fermier','pêcheur','boulanger'].includes(h.metier) && h.besoin!=='malade').length*2.5;
+const prod = () => S.habs.filter(h=>PRODUCTEURS.includes(h.metier) && !h.besoin).length*2.6*saison().k;
+const conso = () => S.habs.length*1.0;
 const jauges = () => {
   const v=S.village, n=S.habs.length;
   return {
-    nourriture: clamp(Math.round(100*(v.stock/n)/6),0,100),   // 6 jours de réserve = 100%
-    securite: Math.round(100*S.habs.filter(h=>h.besoin!=='menace').length/n),
-    sante: Math.round(100*S.habs.filter(h=>h.besoin!=='malade').length/n),
+    nourriture: clamp(Math.round(100*(v.stock/n)/5),0,100),
+    securite: Math.round(100*S.habs.filter(h=>!['menace','querelle'].includes(h.besoin)).length/n),
+    sante: Math.round(100*S.habs.filter(h=>!['malade','blesse'].includes(h.besoin)).length/n),
     richesse: clamp(Math.round(v.richesse),0,100)
   };
 };
 const nomDieu = id => id==='joueur'? S.dieu.nom : DIEUX_PNJ.find(d=>d.id===id).nom;
 const attr = (k,v) => S.dieu[k]===v;
+const pouvoirJour = () => croyants().length*ferveur()/100*1.6 + S.oeuvres.temple*2 + S.oeuvres.autel + 0.5;
 
-/* ---------- coûts (colorés par les attributs) ---------- */
-function coutAction(a){
-  let c = {presage:2, pluie:8, guerison:10, abondance:20, bete:12, autel:15, temple:60, prophete:40}[a];
-  if(a==='pluie'&&attr('element','eau')) c-=3;
-  if(a==='bete'&&attr('element','feu')) c-=4;
-  if(a==='abondance'&&attr('element','terre')) c-=5;
-  if(a==='presage'&&attr('element','vent')) c-=1;
-  return Math.max(1,c);
-}
+/* ---------- coûts ---------- */
 function coutCarte(c){
   let k = BESOINS[c.besoin].cout;
-  if(c.conversion) k = attr('element','ombre')? k : k*2;
+  if(c.tuto!==undefined) k = [1,3,5][c.tuto];
+  if(c.conversion && c.besoin!=='reve') k = attr('element','ombre')? k : k*2;
   if(c.conversion && attr('maniere','discret')) k-=1;
   return Math.max(1,k);
 }
 
+/* ---------- le prophète : les trois premières cartes ---------- */
+const TUTO = [
+  {txt:'Es-tu vraiment là ? Donne-moi un signe, un seul, et je parlerai de toi aux miens.', ok:'Un signe discret a traversé la nuit du prophète. Il a parlé de toi à toute sa famille.', fx:()=>{ const p=prophete(); S.habs.filter(h=>h.famille===p.famille).forEach(h=>{h.connait.joueur=true; if(h.dieu!=='joueur') h.foi-=8;}); p.foi=85; }},
+  {txt:'La fièvre a pris le plus jeune de la maison. Si tu le guéris, tout le quartier le saura.', ok:'L\'enfant s\'est levé au matin, guéri. Les voisins chuchotent un nom nouveau.', fx:()=>{ const p=prophete(); shuffle(S.habs.filter(h=>h.famille!==p.famille)).slice(0,6).forEach(h=>{h.connait.joueur=true; if(h.foi<45) h.foi-=5;}); p.foi=100; }},
+  {txt:'Laisse-moi te bâtir un autel à la lisière du bois. Les gens verront qu\'un dieu nouveau veille ici.', ok:'Le prophète a dressé un autel de pierres. Chaque jour, quelqu\'un s\'y arrêtera.', fx:()=>{ S.oeuvres.autel++; }}
+];
+function carteTuto(){
+  if(S.tuto>=TUTO.length) return;
+  const p=prophete(); if(!p) return;
+  if(S.cartes.some(c=>c.tuto!==undefined)) return;
+  S.cartes.unshift({id:Date.now()+rnd(9999), hab:p.id, besoin:'petite', tuto:S.tuto, txt:TUTO[S.tuto].txt, tick:S.tick});
+}
+
 /* ---------- prières ---------- */
+function texte(besoin, h){
+  let t=pick(BESOINS[besoin].txt);
+  const v=S.village;
+  t=t.replace('{fam}', v.conflit? v.conflit.find(f=>f!==h.famille)||'voisins' : 'voisins');
+  t=t.replace('{mort}', h.deuilDe||'un proche');
+  return t;
+}
+function ajouterCarte(h, besoin, conversion){
+  if(S.cartes.some(c=>c.hab===h.id)) return false;
+  S.cartes.push({id:Date.now()+rnd(99999), hab:h.id, besoin, conversion:!!conversion, txt:texte(besoin,h), tick:S.tick});
+  h.priePas=3; return true;
+}
 function genererPrieres(){
   S.habs.forEach(h=>{
     if(h.priePas>0) return;
     const douteur = h.foi<30;
-    let besoin = h.besoin;
-    if(!besoin && h.dieu==='joueur' && Math.random()<0.25) besoin='petite';
-    if(!besoin && douteur && h.connait.joueur && Math.random()<0.2) besoin='petite';
-    if(!besoin) return;
-    if(h.dieu==='joueur' || (douteur && h.connait.joueur)){
-      if(S.cartes.some(c=>c.hab===h.id)) return;
-      S.cartes.push({id:Date.now()+rnd(9999), hab:h.id, besoin, conversion:h.dieu!=='joueur',
-        txt:pick(BESOINS[besoin].txt), jour:S.jour});
-      h.priePas=1;
+    if(h.dieu==='joueur'){
+      if(h.besoin) ajouterCarte(h, h.besoin, false);
+      else if(Math.random()<0.12) ajouterCarte(h, 'petite', false);
+    } else if(douteur && h.connait.joueur){
+      if(h.besoin && Math.random()<0.6) ajouterCarte(h, h.besoin, true);
+      else if(Math.random()<0.08) ajouterCarte(h, 'reve', true);
     }
   });
 }
 
 function repondre(carte, exauce){
-  const h = S.habs[carte.hab];
+  const h = S.habs[carte.hab]; if(!h) return;
   S.cartes = S.cartes.filter(c=>c.id!==carte.id);
   if(exauce){
     const cout=coutCarte(carte);
     if(S.pouvoir<cout) return toast('Pas assez de pouvoir.');
     S.pouvoir-=cout;
+    if(carte.tuto!==undefined){
+      TUTO[carte.tuto].fx(); log(TUTO[carte.tuto].ok, true); S.tuto++;
+      toast('Le prophète a entendu.'); save(); render(); return;
+    }
     resoudre(h, carte.besoin);
     let gain = BESOINS[carte.besoin].foi; if(attr('maniere','brutal')) gain+=5;
     if(carte.conversion){
       const ancien=nomDieu(h.dieu);
-      h.dieu='joueur'; h.foi=50;
-      log(`${h.prenom} ${h.famille} a quitté ${ancien} pour te suivre. Ses proches ont entendu ton nom.`);
+      h.dieu='joueur'; h.foi=55;
+      log(`${nomH(h)} a quitté ${ancien} pour te suivre.`, true);
       S.habs.filter(x=>x.famille===h.famille).forEach(x=>{x.connait.joueur=true; if(x.dieu!=='joueur') x.foi-=5;});
       toast(`${h.prenom} te suit désormais !`);
     } else {
       h.foi=clamp(h.foi+gain,0,100);
-      // les proches entendent parler du miracle
-      if(Math.random()<0.5){ const p=pick(S.habs.filter(x=>x.famille===h.famille)); p.connait.joueur=true; }
+      if(Math.random()<0.5){ const p=pick(S.habs.filter(x=>x.famille===h.famille&&!x.connait.joueur)); if(p) p.connait.joueur=true; }
+      if(h.prophete && Math.random()<0.5){ const p=pick(S.habs.filter(x=>!x.connait.joueur)); if(p){p.connait.joueur=true;} }
     }
   } else {
-    if(carte.conversion){ /* on laisse le douteur à son dieu */ }
-    else { h.foi=clamp(h.foi-(attr('maniere','doux')?10:15),0,100);
-      if(h.foi<30) log(`${h.prenom} ${h.famille} doute de toi.`); }
+    if(carte.tuto!==undefined){ prophete().foi-=15; log('Le prophète attend encore. Sa foi vacille.'); }
+    else if(!carte.conversion){ h.foi=clamp(h.foi-(attr('maniere','doux')?10:15),0,100);
+      if(h.foi<30) log(`${nomH(h)} doute de toi.`); }
   }
   save(); render();
 }
 
 function resoudre(h, besoin){
-  if(besoin==='affame'){ S.village.stock+=4; h.besoin=null; }
-  if(besoin==='malade'){ h.besoin=null; }
-  if(besoin==='menace'){ h.besoin=null; h.protege=2; }
+  if(besoin==='affame'){ S.village.stock+=5; h.besoin=null; }
+  if(besoin==='malade'||besoin==='blesse'){ h.besoin=null; }
+  if(besoin==='menace'){ h.besoin=null; h.protege=12; }
+  if(besoin==='querelle'){ h.besoin=null; h.protege=6; }
   if(besoin==='pauvre'){ S.village.richesse+=3; h.besoin=null; }
-  if(besoin==='petite'){ }
+  if(besoin==='deuil'){ h.besoin=null; }
 }
 
-/* ---------- actions du catalogue ---------- */
+/* ---------- catalogue d'actions ---------- */
+// cibles possibles : 'personne' | 'famille' | 'village' ; coût par cible
 const ACTIONS = [
-  {id:'presage', type:'Signe', nom:'Présage', desc:'Un rêve visite toute une famille : elle te connaît et sa foi monte un peu.', cible:'famille'},
-  {id:'pluie', type:'Miracle', nom:'Pluie bienfaisante', desc:'Les champs boivent : le grenier se remplit. Trop de pluie peut inonder une famille.', cible:'village'},
-  {id:'guerison', type:'Miracle', nom:'Guérison', desc:'Tous les malades du village se relèvent. Ceux qui te connaissent voient le miracle.', cible:'village'},
-  {id:'abondance', type:'Miracle', nom:'Abondance', desc:'Les échanges prospèrent : la richesse du village grimpe.', cible:'village'},
-  {id:'bete', type:'Épreuve', nom:'Éveiller une bête', desc:'Une bête rôde : la peur multiplie les prières. Elle tue vraiment, et ton caractère s\'assombrit.', cible:'village'},
-  {id:'autel', type:'Œuvre', nom:'Autel', desc:'Chaque jour, un habitant de plus apprend ton nom.', cible:'village', max:3},
-  {id:'prophete', type:'Œuvre', nom:'Prophète', desc:'Il parle en ton nom : deux habitants par jour te découvrent, et les douteurs l\'écoutent.', cible:'village', max:1},
-  {id:'temple', type:'Œuvre', nom:'Temple', desc:'Demande 10 croyants. Chaque jour : trois habitants te découvrent et la foi de tes fidèles monte.', cible:'village', max:1}
+  {id:'reve', type:'Signe', nom:'Rêve', cibles:{personne:1}, desc:'Une personne rêve de toi : elle te connaît, et sa foi en son dieu actuel vacille. Chez un fidèle, sa foi monte.'},
+  {id:'presage', type:'Signe', nom:'Présage', cibles:{famille:3}, desc:'Un même signe visite toute une famille : elle te connaît, ses doutes grandissent.'},
+  {id:'guerison', type:'Miracle', nom:'Guérison', cibles:{personne:3, famille:7, village:16}, desc:'Les malades et blessés se relèvent. Un miracle visible : les témoins te découvrent.'},
+  {id:'pluie', type:'Miracle', nom:'Pluie bienfaisante', cibles:{village:8}, desc:'Les champs boivent : le grenier se remplit. Trop de pluie peut inonder une famille.'},
+  {id:'abondance', type:'Miracle', nom:'Abondance', cibles:{famille:8, village:20}, desc:'Les échanges prospèrent, les ruinés se relèvent, la richesse grimpe.'},
+  {id:'protection', type:'Miracle', nom:'Protection', cibles:{famille:6, village:14}, desc:'Ni bête, ni querelle, ni bandit ne touche les protégés pendant deux jours.'},
+  {id:'fete', type:'Miracle', nom:'Fête en ton nom', cibles:{village:12}, desc:'Tes fidèles festoient. Leur foi monte, les curieux te découvrent, le grenier se vide un peu.'},
+  {id:'bete', type:'Épreuve', nom:'Éveiller une bête', cibles:{village:10}, desc:'Une bête rôde : la peur multiplie les prières. Elle tue vraiment, et ton caractère s\'assombrit.'},
+  {id:'discorde', type:'Épreuve', nom:'Semer la discorde', cibles:{famille:5}, desc:'Cette famille se querelle avec sa voisine. Les deux prient pour la paix… et tu t\'assombris.'},
+  {id:'autel', type:'Œuvre', nom:'Autel', cibles:{village:15}, max:3, desc:'Chaque jour, un habitant de plus apprend ton nom.'},
+  {id:'temple', type:'Œuvre', nom:'Temple', cibles:{village:60}, max:1, desc:'Demande 12 croyants. Chaque jour : trois habitants te découvrent et la foi de tes fidèles monte.'}
 ];
-
-function faireAction(id, famille){
-  const cout=coutAction(id);
-  if(S.pouvoir<cout) return toast('Pas assez de pouvoir.');
+function coutAction(a, cible){
+  let c = a.cibles[cible];
+  if(a.id==='pluie'&&attr('element','eau')) c-=3;
+  if(a.id==='bete'&&attr('element','feu')) c-=4;
+  if(a.id==='abondance'&&attr('element','terre')) c=Math.round(c*0.75);
+  if((a.id==='reve'||a.id==='presage')&&attr('element','vent')) c=Math.max(1,c-1);
+  return Math.max(1,c);
+}
+function faireAction(id, cible, quiId){
   const a=ACTIONS.find(x=>x.id===id);
+  const cout=coutAction(a,cible);
+  if(S.pouvoir<cout) return toast('Pas assez de pouvoir.');
   if(a.max && S.oeuvres[id]>=a.max) return toast('Déjà construit.');
-  if(id==='temple' && croyants().length<10) return toast('Il te faut 10 croyants.');
+  if(id==='temple' && croyants().length<12) return toast('Il te faut 12 croyants.');
+  const lum = attr('element','lumiere')?1.6:1;
+  let fam=null, who=null, groupe=[];
+  if(cible==='personne'){ who=S.habs.find(h=>h.id==quiId); if(!who) return toast('Choisis une personne.'); groupe=[who]; }
+  if(cible==='famille'){ fam=quiId; if(!fam) return toast('Choisis une famille.'); groupe=S.habs.filter(h=>h.famille===fam); }
+  if(cible==='village'){ groupe=S.habs; }
   S.pouvoir-=cout;
-  const lum = attr('element','lumiere')?1.5:1;
-  if(id==='presage'){
-    const fam=S.habs.filter(h=>h.famille===famille);
-    fam.forEach(h=>{h.connait.joueur=true; if(h.dieu==='joueur') h.foi=clamp(h.foi+5,0,100); else h.foi-=3;});
-    log(`Un même rêve a visité les ${famille} cette nuit. Ton nom y était.`);
-  }
-  if(id==='pluie'){
-    S.village.stock+=S.habs.length*2; log('Une pluie douce a gonflé les épis. Le grenier respire.');
-    if(Math.random()<0.2){ const f=pick(FAMILLES); S.habs.filter(h=>h.famille===f&&!h.besoin).slice(0,2).forEach(h=>{h.besoin='pauvre';h.besoinDepuis=0;}); log(`Trop d'eau : la maison des ${f} a été inondée.`); }
-    S.habs.filter(h=>Math.random()<0.3*lum).forEach(h=>h.connait.joueur=true);
-  }
-  if(id==='guerison'){
-    const n=S.habs.filter(h=>h.besoin==='malade').length;
-    S.habs.forEach(h=>{ if(h.besoin==='malade'){h.besoin=null; h.connait.joueur=true; if(h.dieu!=='joueur'&&h.foi<40) h.foi-=10;} });
-    log(n? `${n} malade(s) se sont relevés d'un coup. Les gens se regardent, étonnés.` : 'Personne n\'était malade : le miracle est passé inaperçu.');
-  }
-  if(id==='abondance'){ S.village.richesse+=25; log('Les échoppes se remplissent, les bourses aussi.'); S.habs.filter(h=>Math.random()<0.25*lum).forEach(h=>h.connait.joueur=true); }
-  if(id==='bete'){ S.village.bete=3+rnd(3); S.caractere-=2; log('Quelque chose a hurlé dans la forêt. Les volets se ferment tôt ce soir.'); }
-  if(id==='autel'||id==='prophete'||id==='temple'){ S.oeuvres[id]++; log(`${a.nom} : ${id==='temple'?'les pierres s\'élèvent au centre du village.':id==='prophete'?'un homme s\'est mis à parler de toi sur la place.':'un petit autel de pierre se dresse à la lisière.'}`); }
-  if(attr('maniere','visible')) S.habs.filter(h=>Math.random()<0.15).forEach(h=>h.connait.joueur=true);
+  const temoins = (n)=> shuffle(S.habs.filter(h=>!h.connait.joueur)).slice(0,Math.round(n*lum)).forEach(h=>h.connait.joueur=true);
+
+  if(id==='reve'){ who.connait.joueur=true; if(who.dieu==='joueur') who.foi=clamp(who.foi+12,0,100); else { who.foi=clamp(who.foi-12,0,100); who.priePas=0; } log(`${nomH(who)} a rêvé de toi cette nuit.`); }
+  if(id==='presage'){ groupe.forEach(h=>{h.connait.joueur=true; if(h.dieu==='joueur') h.foi=clamp(h.foi+6,0,100); else h.foi=clamp(h.foi-8,0,100);}); log(`Un même songe a visité les ${fam} cette nuit. Ton nom y était.`); }
+  if(id==='guerison'){ let n=0; groupe.forEach(h=>{ if(['malade','blesse'].includes(h.besoin)){h.besoin=null;n++; h.connait.joueur=true; if(h.dieu!=='joueur') h.foi-=10;} }); temoins(n*1.5); log(n? `${n} malade(s) se sont relevés d'un coup.` : 'Personne n\'était souffrant : le miracle est passé inaperçu.'); }
+  if(id==='pluie'){ S.village.stock+=S.habs.length*2.2; log('Une pluie douce a gonflé les épis. Le grenier respire.'); temoins(4);
+    if(Math.random()<0.2){ const f=pick(FAMILLES); S.habs.filter(h=>h.famille===f&&!h.besoin).slice(0,2).forEach(h=>{h.besoin='pauvre';h.besoinDepuis=0;}); log(`Trop d'eau : la maison des ${f} a été inondée.`); } }
+  if(id==='abondance'){ S.village.richesse+= cible==='village'?25:8; groupe.forEach(h=>{ if(h.besoin==='pauvre'){h.besoin=null; h.connait.joueur=true;} }); temoins(cible==='village'?4:1); log(cible==='village'?'Les échoppes se remplissent, les bourses aussi.':`Les ${fam} ont fait de bonnes affaires, sans trop savoir pourquoi.`); }
+  if(id==='protection'){ groupe.forEach(h=>{h.protege=12; if(['menace','querelle'].includes(h.besoin)) h.besoin=null;}); log(cible==='village'?'Une quiétude étrange est tombée sur le village.':`Les ${fam} dorment tranquilles ce soir.`); }
+  if(id==='fete'){ croyants().forEach(h=>h.foi=clamp(h.foi+10,0,100)); S.village.stock-=S.habs.length*0.6; temoins(6); S.habs.filter(h=>h.dieu!=='joueur'&&h.connait.joueur).forEach(h=>h.foi-=4); log('On a dansé en ton nom jusque tard dans la nuit.'); }
+  if(id==='bete'){ S.village.bete=4+rnd(4); S.caractere-=2; log('Quelque chose a hurlé dans la forêt. Les volets se ferment tôt ce soir.'); }
+  if(id==='discorde'){ const autre=pick(FAMILLES.filter(f=>f!==fam)); S.village.conflit=[fam,autre]; S.village.conflitJours=3; S.caractere-=1; log(`Une borne déplacée, un mot de trop : les ${fam} et les ${autre} sont à couteaux tirés.`); }
+  if(id==='autel'||id==='temple'){ S.oeuvres[id]++; log(id==='temple'?'Les pierres du temple s\'élèvent au centre du village.':'Un autel de pierre se dresse à l\'entrée du village.', true); }
+  if(attr('maniere','visible')) temoins(2);
   toast(a.nom+' !'); save(); render();
 }
 
-/* ---------- un jour qui passe ---------- */
-function jourSuivant(){
-  S.jour++;
+/* ---------- une tranche de 4 heures ---------- */
+function moment(){
   const v=S.village, n=S.habs.length;
-  // 1. nourriture
-  v.stock += prod() - n;
-  if(v.stock<0){ v.stock=0; shuffle(S.habs.filter(h=>!h.besoin)).slice(0,4).forEach(h=>{h.besoin='affame';h.besoinDepuis=0;}); }
-  // 2. richesse
-  v.richesse += (prod()-n)/4 + S.habs.filter(h=>h.metier==='marchand'&&!h.besoin).length - 1;
-  v.richesse = clamp(v.richesse,0,100);
-  if(v.richesse<30 && Math.random()<0.5){ const h=pick(S.habs.filter(h=>!h.besoin)); if(h){h.besoin='pauvre';h.besoinDepuis=0;} }
-  // 3. santé
-  S.habs.forEach(h=>{ if(!h.besoin && Math.random()<(0.05+(v.stock<10?0.06:0))){h.besoin='malade';h.besoinDepuis=0;} });
-  const soins=S.habs.filter(h=>h.metier==='soigneur'&&h.besoin!=='malade').length*2;
-  S.habs.filter(h=>h.besoin==='malade'&&h.besoinDepuis>=2).slice(0,soins).forEach(h=>h.besoin=null);
-  // 4. sécurité
-  if(v.bete<=0 && Math.random()<0.1){ v.bete=2+rnd(3); log('Des traces inconnues près de la rivière. Une bête est arrivée.'); }
+  const libres = ()=>S.habs.filter(h=>!h.besoin&&h.protege<=0);
+  const evts = [];
+  // contagion
+  S.habs.filter(h=>h.besoin==='malade').forEach(m=>{
+    S.habs.filter(h=>h.famille===m.famille&&!h.besoin&&h.protege<=0).forEach(h=>{ if(Math.random()<0.04){h.besoin='malade';h.besoinDepuis=0;} });
+  });
+  // maladie spontanée (plus en hiver, plus si on a faim)
+  const pMal = 0.008 + (saison().n==='Hiver'?0.008:0) + (v.stock<n?0.01:0);
+  libres().forEach(h=>{ if(Math.random()<pMal){h.besoin='malade';h.besoinDepuis=0;} });
+  // blessures au travail
+  libres().filter(h=>['forgeron','bûcheron','fermier','soldat'].includes(h.metier)).forEach(h=>{ if(Math.random()<0.012){h.besoin='blesse';h.besoinDepuis=0; evts.push(`${nomH(h)} s'est blessé·e au travail.`);} });
+  // faim
+  if(v.stock<=0){ shuffle(libres()).slice(0,2).forEach(h=>{h.besoin='affame';h.besoinDepuis=0;}); }
+  // ruine
+  if(v.richesse<30 && Math.random()<0.25){ const h=pick(libres()); if(h){h.besoin='pauvre';h.besoinDepuis=0;} }
+  // bandits
+  if(Math.random()<0.03){ v.richesse-=6; const h=pick(libres()); if(h){h.besoin='pauvre';h.besoinDepuis=0; evts.push(`Des bandits ont dévalisé ${nomH(h)} sur la route.`);} }
+  // querelle spontanée
+  if(!v.conflit && Math.random()<0.03){ const a=pick(FAMILLES), b=pick(FAMILLES.filter(f=>f!==a)); v.conflit=[a,b]; v.conflitJours=2; evts.push(`Les ${a} et les ${b} se sont disputé un pré. Ça gronde.`); }
+  if(v.conflit){ shuffle(S.habs.filter(h=>v.conflit.includes(h.famille)&&!h.besoin&&h.protege<=0)).slice(0,2).forEach(h=>{h.besoin='querelle';h.besoinDepuis=0;});
+    if(Math.random()<0.04){ const h=pick(S.habs.filter(x=>x.besoin==='querelle')); if(h){h.besoin='blesse'; evts.push(`La querelle a tourné aux coups : ${nomH(h)} est blessé·e.`);} } }
+  // bête
+  if(v.bete<=0 && Math.random()<0.015){ v.bete=3+rnd(4); evts.push('Des traces inconnues près de la rivière. Une bête est arrivée.'); }
   if(v.bete>0){
-    shuffle(S.habs.filter(h=>!h.besoin&&!h.protege)).slice(0,3).forEach(h=>{h.besoin='menace';h.besoinDepuis=0;});
+    shuffle(libres()).slice(0,2).forEach(h=>{h.besoin='menace';h.besoinDepuis=0;});
     const soldats=S.habs.filter(h=>h.metier==='soldat'&&!h.besoin).length;
-    v.bete -= 0.3+soldats*0.4;
-    if(Math.random()<0.12){ const vict=pick(S.habs.filter(h=>h.besoin==='menace')); if(vict){ mort(vict, 'emporté·e par la bête'); } }
-    if(v.bete<=0){ log('La bête a été chassée. Le village respire.'); S.habs.forEach(h=>{if(h.besoin==='menace')h.besoin=null;}); }
+    v.bete -= 0.15+soldats*0.12;
+    if(Math.random()<0.03){ const vict=pick(S.habs.filter(h=>h.besoin==='menace')); if(vict) mort(vict,'emporté·e par la bête'); }
+    if(v.bete<=0){ evts.push('La bête a été chassée. Le village respire.'); S.habs.forEach(h=>{if(h.besoin==='menace')h.besoin=null;}); }
   }
-  S.habs.forEach(h=>{ if(h.protege)h.protege--; });
-  // 5. besoins qui durent
+  // soins et guérisons naturelles
+  const soins=S.habs.filter(h=>h.metier==='soigneur'&&!h.besoin).length;
+  S.habs.filter(h=>['malade','blesse'].includes(h.besoin)&&h.besoinDepuis>=3).slice(0,soins).forEach(h=>h.besoin=null);
+  S.habs.filter(h=>h.besoin==='pauvre'&&h.besoinDepuis>=9&&Math.random()<0.2).forEach(h=>h.besoin=null);
+  S.habs.filter(h=>h.besoin==='deuil'&&h.besoinDepuis>=6).forEach(h=>h.besoin=null);
+  // rencontres : un fidèle parle de toi
+  croyants().filter(h=>h.foi>60).forEach(h=>{ if(Math.random()<0.06){ const p=pick(S.habs.filter(x=>!x.connait.joueur)); if(p){p.connait.joueur=true;} } });
+  // moments heureux
+  if(Math.random()<0.04){ const h=pick(croyants()); if(h){ evts.push(pick([`On a célébré des noces chez les ${h.famille}.`,`Une naissance chez les ${h.famille}. On a chanté.`,`${nomH(h)} a rapporté une belle prise. Tout le quartier en a eu.`])); S.habs.filter(x=>x.famille===h.famille&&x.dieu==='joueur').forEach(x=>x.foi=clamp(x.foi+4,0,100)); } }
+  // besoins qui durent : la foi s'use, et parfois on meurt
   S.habs.forEach(h=>{
-    if(h.besoin){ h.besoinDepuis++; h.foi=clamp(h.foi-3,0,100);
-      if(h.besoin==='affame'&&h.besoinDepuis>6&&Math.random()<0.2) mort(h,'mort·e de faim');
-      if(h.besoin==='malade'&&h.besoinDepuis>5&&Math.random()<0.15) mort(h,'emporté·e par la fièvre');
+    if(h.besoin){ h.besoinDepuis++; h.foi=clamp(h.foi-1,0,100);
+      if(h.besoin==='affame'&&h.besoinDepuis>18&&Math.random()<0.04) mort(h,'mort·e de faim');
+      if(h.besoin==='malade'&&h.besoinDepuis>15&&Math.random()<0.03) mort(h,'emporté·e par la fièvre');
     }
+    if(h.protege>0) h.protege--;
     h.priePas=Math.max(0,h.priePas-1);
   });
-  // 6. les dieux PNJ répondent (les gros ignorent plus)
+  // les dieux PNJ répondent (les gros ignorent plus)
   DIEUX_PNJ.forEach(d=>{
     const fid=S.habs.filter(h=>h.dieu===d.id);
-    const p=clamp(0.7 - fid.length/25, 0.15, 0.7);
+    const p=clamp(0.75 - fid.length/40, 0.12, 0.75)/3;
     fid.forEach(h=>{
-      const prie = h.besoin ? (h.besoinDepuis>=1 ? h.besoin : null) : (Math.random()<0.25 ? 'petite' : null);
+      const prie = h.besoin ? (h.besoinDepuis>=2 && Math.random()<0.5 ? h.besoin : null) : (Math.random()<0.08 ? 'petite' : null);
       if(!prie) return;
-      if(Math.random()<p){ resoudre(h,prie); h.foi=clamp(h.foi+12,0,100); }
-      else h.foi=clamp(h.foi-(prie==='petite'?4:6),0,100);
+      if(Math.random()<p*3*0.9){ resoudre(h,prie); h.foi=clamp(h.foi+10,0,100); } else h.foi=clamp(h.foi-(prie==='petite'?3:5),0,100);
     });
-    // ils reconquièrent tes douteurs
-    croyants().filter(h=>h.foi<30).forEach(h=>{ if(Math.random()<0.15){ h.dieu=d.id; h.foi=45; log(`${h.prenom} ${h.famille} est retourné·e vers ${d.nom}.`); } });
+    croyants().filter(h=>h.foi<30&&!h.prophete).forEach(h=>{ if(Math.random()<0.04){ h.dieu=d.id; h.foi=45; log(`${nomH(h)} est retourné·e vers ${d.nom}.`); } });
   });
-  // 7. douteurs PNJ qui changent entre dieux PNJ (concurrence naturelle)
-  S.habs.filter(h=>h.dieu!=='joueur'&&h.foi<25&&Math.random()<0.1).forEach(h=>{ const autre=DIEUX_PNJ.find(d=>d.id!==h.dieu); h.dieu=autre.id; h.foi=45; });
-  // 8. œuvres
-  for(let i=0;i<S.oeuvres.autel;i++){ const h=pick(S.habs.filter(h=>!h.connait.joueur)); if(h)h.connait.joueur=true; }
-  for(let i=0;i<S.oeuvres.prophete*2;i++){ const h=pick(S.habs.filter(h=>!h.connait.joueur)); if(h)h.connait.joueur=true; }
-  if(S.oeuvres.prophete){ S.habs.filter(h=>h.dieu!=='joueur'&&h.foi<30&&h.connait.joueur).forEach(h=>{ if(Math.random()<0.1){h.dieu='joueur';h.foi=45;log(`Le prophète a convaincu ${h.prenom} ${h.famille}.`);} }); }
-  if(S.oeuvres.temple){ for(let i=0;i<3;i++){ const h=pick(S.habs.filter(h=>!h.connait.joueur)); if(h)h.connait.joueur=true; } croyants().forEach(h=>h.foi=clamp(h.foi+2,0,100)); }
-  // 9. caractère revient doucement vers le centre
-  if(S.caractere<0) S.caractere+=0.2;
-  // 10. pouvoir du jour
-  const c=croyants().length, f=ferveur();
-  const gain = Math.ceil(c*f/100*1.5) + S.oeuvres.temple*2 + S.oeuvres.autel;
-  S.pouvoir += gain;
-  // 11. cartes trop vieilles = ignorées
-  S.cartes.filter(k=>S.jour-k.jour>=2).forEach(k=>{ const h=S.habs[k.hab]; if(h.dieu==='joueur'){h.foi=clamp(h.foi-10,0,100);} });
-  S.cartes=S.cartes.filter(k=>S.jour-k.jour<2);
-  // 12. extinction / renaissance
-  if(c===0){ const d=pick(S.habs.filter(h=>h.foi<30&&h.connait.joueur)); if(d&&Math.random()<0.4){d.dieu='joueur';d.foi=50;log(`${d.prenom} ${d.famille}, déçu·e, s'est souvenu·e de toi.`);} else if(!S.habs.some(h=>h.connait.joueur)){ pick(S.habs).connait.joueur=true; } }
-  log(`Jour ${S.jour} — ${gain} de pouvoir reçu (${c} croyant·s, ferveur ${f}).`);
+  // douteurs PNJ qui passent d'un dieu PNJ à l'autre
+  S.habs.filter(h=>h.dieu!=='joueur'&&h.foi<22&&Math.random()<0.03).forEach(h=>{ const autre=DIEUX_PNJ.find(d=>d.id!==h.dieu); h.dieu=autre.id; h.foi=45; });
+  // le prophète convainc
+  const pr=prophete(); if(pr && pr.foi>50){ const d=pick(S.habs.filter(h=>h.dieu!=='joueur'&&h.foi<30&&h.connait.joueur)); if(d&&Math.random()<0.06){ d.dieu='joueur'; d.foi=50; log(`Le prophète a convaincu ${nomH(d)}.`, true); } }
+  // pouvoir par tranche
+  S.pouvoirFrac += pouvoirJour()/TICKS_PAR_JOUR;
+  if(S.pouvoirFrac>=1){ const g=Math.floor(S.pouvoirFrac); S.pouvoir+=g; S.pouvoirFrac-=g; }
+  // cartes trop vieilles (2 jours) = ignorées
+  S.cartes.filter(k=>k.tuto===undefined&&S.tick-k.tick>=2*TICKS_PAR_JOUR).forEach(k=>{ const h=S.habs[k.hab]; if(h&&h.dieu==='joueur') h.foi=clamp(h.foi-10,0,100); });
+  S.cartes=S.cartes.filter(k=>k.tuto!==undefined||S.tick-k.tick<2*TICKS_PAR_JOUR);
+  evts.forEach(e=>log(e));
   genererPrieres();
+  carteTuto();
+}
+
+/* ---------- fin de journée ---------- */
+function finDeJournee(){
+  const v=S.village, n=S.habs.length;
+  v.stock = v.stock*0.97 + prod() - conso();
+  if(v.stock<0) v.stock=0;
+  v.richesse += (prod()-conso())/5 + S.habs.filter(h=>h.metier==='marchand'&&!h.besoin).length*0.8 - 1.2;
+  v.richesse = clamp(v.richesse,0,100);
+  if(v.conflit){ v.conflitJours--; if(v.conflitJours<=0){ log(`Les ${v.conflit[0]} et les ${v.conflit[1]} ont enterré la hache.`); v.conflit=null; S.habs.forEach(h=>{if(h.besoin==='querelle')h.besoin=null;}); } }
+  // œuvres
+  for(let i=0;i<S.oeuvres.autel;i++){ const h=pick(S.habs.filter(h=>!h.connait.joueur)); if(h)h.connait.joueur=true; }
+  if(S.oeuvres.temple){ for(let i=0;i<3;i++){ const h=pick(S.habs.filter(h=>!h.connait.joueur)); if(h)h.connait.joueur=true; } croyants().forEach(h=>h.foi=clamp(h.foi+2,0,100)); }
+  if(S.caractere<0) S.caractere+=0.15;
+  // extinction / renaissance
+  if(croyants().length===0){ const d=pick(S.habs.filter(h=>h.foi<30&&h.connait.joueur)); if(d&&Math.random()<0.4){d.dieu='joueur';d.foi=50;d.prophete=true;log(`${nomH(d)}, déçu·e, s'est souvenu·e de toi. Un nouveau prophète.`, true);} else if(!S.habs.some(h=>h.connait.joueur)){ pick(S.habs).connait.joueur=true; } }
+  const sNew = saison();
+  if((S.jour-1)%JOURS_PAR_SAISON===0) log(`${sNew.e} ${sNew.n}. ${sNew.n==='Hiver'?'Les champs dorment, les réserves fondent.':sNew.n==='Été'?'Les récoltes sont belles.':''}`, true);
+  log(`Jour ${S.jour} — ${croyants().length} croyant·s, ferveur ${ferveur()}, ${Math.round(pouvoirJour())} de pouvoir par jour.`);
 }
 function mort(h, cause){
-  log(`${h.prenom} ${h.famille} est ${cause}.`);
+  log(`${nomH(h)} est ${cause}.`, true); S.morts++;
   const i=S.habs.indexOf(h); S.habs.splice(i,1); S.habs.forEach((x,k)=>x.id=k);
   S.cartes=S.cartes.filter(c=>c.hab!==i).map(c=>({...c, hab:c.hab>i?c.hab-1:c.hab}));
-  // une naissance remplace un mort (population stable)
-  const fam=pick(FAMILLES); const dieu=pick(['ormund','selune']);
-  S.habs.push({id:S.habs.length, prenom:pick(PRENOMS), famille:fam, metier:pick(METIERS), dieu, foi:50, besoin:null, besoinDepuis:0, connait:{}, priePas:0});
+  S.habs.filter(x=>x.famille===h.famille&&!x.besoin).slice(0,2).forEach(x=>{x.besoin='deuil';x.besoinDepuis=0;x.deuilDe=h.prenom;});
+  if(h.prophete){ const c=pick(croyants()); if(c){c.prophete=true; log(`${nomH(c)} reprend la parole du prophète.`);} }
+  const fam=pick(FAMILLES);
+  const nb=nouvelHabitant(fam, pick(['ormund','selune']));
+  nb.id=S.habs.length; nb.foi=50; if(Math.random()<0.5) nb.connait.joueur=S.habs.some(x=>x.famille===fam&&x.connait.joueur);
+  S.habs.push(nb);
 }
+function avancer(){ S.tick++; moment(); if(S.tick%TICKS_PAR_JOUR===0){ S.jour++; finDeJournee(); } }
 function rattraper(){
-  let jours=Math.floor((Date.now()-S.derniereMaj)/DAY_MS);
-  if(jours<=0) return;
-  const n=Math.min(jours,30);
-  for(let i=0;i<n;i++) jourSuivant();
-  S.derniereMaj += jours*DAY_MS;
-  if(n>0) toast(`${n} jour(s) ont passé pendant ton absence.`);
-  save();
+  let ticks=Math.floor((Date.now()-S.derniereMaj)/TICK_MS);
+  if(ticks<=0) return 0;
+  const n=Math.min(ticks, 6*TICKS_PAR_JOUR*5);
+  for(let i=0;i<n;i++) avancer();
+  S.derniereMaj += ticks*TICK_MS;
+  save(); return n;
 }
 
 /* ---------- rendu ---------- */
@@ -361,10 +447,9 @@ const app=document.getElementById('app');
 function render(){
   if(!S) return renderSetup();
   const j=jauges(), c=croyants().length;
-  const nbConv=S.cartes.filter(k=>k.conversion).length;
   app.innerHTML=`
   <header>
-    <h1><span>${S.dieu.nom}</span><small>jour ${S.jour} · v${VERSION}</small></h1>
+    <h1><span>${S.dieu.nom}</span><small>${quand()} · ${saison().e} · v${VERSION}</small></h1>
     <div class="stats">
       <div class="stat gold"><b>${S.pouvoir}</b>pouvoir</div>
       <div class="stat"><b>${c}</b>croyants</div>
@@ -373,7 +458,7 @@ function render(){
     </div>
   </header>
   <main>
-    <div class="tab ${tab==='prieres'?'on':''}" id="t-prieres">${renderPrieres()}</div>
+    <div class="tab ${tab==='prieres'?'on':''}">${renderPrieres()}</div>
     <div class="tab ${tab==='peuple'?'on':''}">${renderPeuple(j)}</div>
     <div class="tab ${tab==='actions'?'on':''}">${renderActions()}</div>
     <div class="tab ${tab==='chronique'?'on':''}">${renderChronique()}</div>
@@ -385,16 +470,21 @@ function render(){
     <button class="${tab==='chronique'?'on':''}" onclick="go('chronique')"><span>📜</span>Chronique</button>
   </nav>`;
 }
-function go(t){tab=t;render()}
+function go(t){tab=t;render();window.scrollTo(0,0)}
 
 function renderPrieres(){
-  if(!S.cartes.length) return `<div class="empty">Aucune prière pour l'instant.<br>Le monde continue de tourner : reviens plus tard, ou avance d'un jour dans les outils de test (onglet Chronique).</div>`;
+  if(!S.cartes.length){
+    const prochain = 10 - Math.floor(((Date.now()-S.derniereMaj)%TICK_MS)/60000);
+    return `<div class="empty">Aucune prière pour l'instant.<br>Le monde avance toutes les dix minutes (prochaine tranche dans ${prochain} min).<br><small>Pour tester sans attendre : onglet Chronique, outils de test.</small></div>`;
+  }
   const k=S.cartes[0], h=S.habs[k.hab], cout=coutCarte(k);
-  return `<div class="card" id="carte" ontouchstart="ts(event)" ontouchend="te(event,${k.id})">
-    <div class="who"><div class="face">${EMOJI[h.metier]}</div><div><b>${h.prenom} ${h.famille}<span class="tagc ${k.conversion?'conv':''}">${k.conversion?'suit '+nomDieu(h.dieu)+' · doute':'te suit · foi '+h.foi}</span></b><small>${h.metier}</small></div></div>
+  const tag = k.tuto!==undefined ? `<span class="tagc pro">ton prophète</span>` : k.conversion ? `<span class="tagc conv">suit ${nomDieu(h.dieu)} · doute</span>` : `<span class="tagc">${h.prophete?'prophète · ':''}foi ${h.foi}</span>`;
+  const aide = k.tuto!==undefined ? 'Les premiers pas passent par ton prophète. Chaque réponse ouvre la suivante.' : k.conversion ? 'Exaucer un douteur d\'un autre dieu coûte plus cher, mais il te suivra.' : 'Ignorer fait baisser sa foi. Sous 30, il doute et les autres dieux l\'entendent.';
+  return `<div class="card ${k.tuto!==undefined?'prophete':''}" id="carte" ontouchstart="ts(event)" ontouchend="te(event,${k.id})">
+    <div class="who"><div class="face">${EMOJI[h.metier]}</div><div><b>${nomH(h)}${tag}</b><small>${h.metier}${h.besoin&&BESOINS[h.besoin].nom?' · '+BESOINS[h.besoin].nom:''}</small></div></div>
     <div class="prayer">« ${k.txt} »</div>
     <div class="btns"><button class="no" onclick="rep(${k.id},false)">Ignorer</button><button class="yes" ${S.pouvoir<cout?'disabled':''} onclick="rep(${k.id},true)">Exaucer · ${cout}</button></div>
-    <div class="cost">${k.conversion?'Exaucer un douteur d\'un autre dieu coûte plus cher, mais il te suivra.':'Ignorer fait baisser sa foi. Sous 30, il doute et les autres dieux l\'entendent.'}</div>
+    <div class="cost">${aide}</div>
   </div>
   <div class="cost">${S.cartes.length} prière(s) en attente · elles expirent après 2 jours</div>`;
 }
@@ -404,59 +494,69 @@ function te(e,id){const dx=e.changedTouches[0].clientX-tx0; if(Math.abs(dx)>70) 
 function rep(id,oui){
   const k=S.cartes.find(c=>c.id===id); if(!k)return;
   if(oui && S.pouvoir<coutCarte(k)) return toast('Pas assez de pouvoir.');
-  const el=document.getElementById('carte'); el.classList.add(oui?'out-r':'out-l');
+  const el=document.getElementById('carte'); if(el) el.classList.add(oui?'out-r':'out-l');
   setTimeout(()=>repondre(k,oui),220);
 }
 
 function barre(nom,val,aide){const cls=val<30?'bad':val<60?'warn':'';return `<div class="gauge"><div class="lbl"><span>${nom}</span><span>${val}%</span></div><div class="bar"><i class="${cls}" style="width:${val}%"></i></div><small style="color:var(--quiet);font-size:12px">${aide}</small></div>`}
 function renderPeuple(j){
-  const v=S.village;
+  const v=S.village, sa=saison();
   let s=`<h2>Le village</h2>
-  ${barre('Nourriture',j.nourriture,`${Math.round(v.stock)} vivres en réserve · production ${prod()} / jour, consommation ${S.habs.length}`)}
-  ${barre('Sécurité',j.securite,v.bete>0?'Une bête rôde autour du village.':'Rien ne menace le village.')}
-  ${barre('Santé',j.sante,`${S.habs.filter(h=>h.besoin==='malade').length} malade(s)`)}
+  ${barre('Nourriture',j.nourriture,`${Math.round(v.stock)} vivres · récolte ${Math.round(prod())} / jour (${sa.e} ${sa.n}), on mange ${Math.round(conso())} / jour, le reste s'abîme`)}
+  ${barre('Sécurité',j.securite,v.bete>0?'Une bête rôde autour du village.':v.conflit?`Les ${v.conflit[0]} et les ${v.conflit[1]} se querellent.`:'Rien ne menace le village.')}
+  ${barre('Santé',j.sante,`${S.habs.filter(h=>['malade','blesse'].includes(h.besoin)).length} malade(s) ou blessé(s)`)}
   ${barre('Richesse',j.richesse,'Ce que le village produit en plus de ses besoins.')}
   <h2>Les dieux</h2>`;
   ['joueur',...DIEUX_PNJ.map(d=>d.id)].forEach(id=>{const n=S.habs.filter(h=>h.dieu===id).length; s+=`<div class="row"><span>${nomDieu(id)}${id==='joueur'?' (toi)':''}<small>${id==='joueur'?[ELEMENTS[S.dieu.element],VALEURS[S.dieu.valeur],MANIERES[S.dieu.maniere]].join(' · ')+' · '+(S.caractere<-1?'sombre':'lumineux'):DIEUX_PNJ.find(d=>d.id===id).titre}</small></span><b>${n}</b></div>`});
-  s+=`<p style="font-size:13px;color:var(--quiet)">Ton commandement : <i>${COMMANDEMENTS[S.dieu.valeur]}</i></p><h2>Les habitants</h2>`;
-  [...S.habs].sort((a,b)=>(b.dieu==='joueur')-(a.dieu==='joueur')||a.famille.localeCompare(b.famille)).forEach(h=>{
-    const et={affame:'a faim',malade:'malade',menace:'menacé·e',pauvre:'ruiné·e'}[h.besoin]||'';
-    s+=`<div class="row"><span>${EMOJI[h.metier]} ${h.prenom} ${h.famille}<small>${h.metier}${et?' · '+et:''}${h.connait.joueur?'':' · ne te connaît pas'}</small></span><span class="foi ${h.dieu==='joueur'?'me':h.foi<30?'doubt':''}">${nomDieu(h.dieu)} ${h.foi}</span></div>`});
+  s+=`<p style="font-size:13px;color:var(--quiet)">Ton commandement : <i>${COMMANDEMENTS[S.dieu.valeur]}</i>${S.oeuvres.autel?` · ${S.oeuvres.autel} autel(s)`:''}${S.oeuvres.temple?' · temple':''}</p><h2>Les familles</h2>`;
+  FAMILLES.forEach(f=>{
+    const membres=S.habs.filter(h=>h.famille===f); const nb=membres.filter(h=>h.dieu==='joueur').length;
+    s+=`<div class="famille"><h3>Les ${f} <small>${nb}/${membres.length} te suivent</small></h3>`;
+    membres.sort((a,b)=>(b.dieu==='joueur')-(a.dieu==='joueur')).forEach(h=>{
+      const et=h.besoin&&BESOINS[h.besoin].nom?BESOINS[h.besoin].nom:'';
+      s+=`<div class="row"><span>${EMOJI[h.metier]} ${h.prenom}${h.prophete?' ✦':''}<small>${h.metier}${et?' · '+et:''}${h.connait.joueur?'':' · ne te connaît pas'}</small></span><span class="foi ${h.dieu==='joueur'?'me':h.foi<30?'doubt':''}">${nomDieu(h.dieu)} ${h.foi}</span></div>`});
+    s+='</div>';
+  });
   return s;
 }
 function renderActions(){
-  let s=`<p style="font-size:13px;color:var(--quiet);margin:0 0 10px">Ton pouvoir vaut à peu près croyants × ferveur. Dépense-le bien : il ne revient qu'une fois par jour.</p>`;
+  let s=`<p style="font-size:13px;color:var(--quiet);margin:0 0 10px">Ton pouvoir vaut à peu près croyants × ferveur, et revient par petites tranches toute la journée (${Math.round(pouvoirJour())} par jour en ce moment).</p>`;
   ['Signe','Miracle','Épreuve','Œuvre'].forEach(type=>{
     s+=`<h2>${type}s</h2>`;
     ACTIONS.filter(a=>a.type===type).forEach(a=>{
-      const cout=coutAction(a.id), fait=a.max&&S.oeuvres[a.id]>=a.max;
+      const cibles=Object.keys(a.cibles);
+      const cb = cibleChoisie[a.id] || cibles[0];
+      const cout=coutAction(a,cb), fait=a.max&&S.oeuvres[a.id]>=a.max;
       let ctrl='';
-      if(a.cible==='famille') ctrl=`<select class="sel" id="fam-${a.id}">${FAMILLES.map(f=>`<option>${f}</option>`).join('')}</select>`;
-      s+=`<div class="act"><div><b>${a.nom}${fait?' ✓':''}</b><small>${a.desc}</small>${ctrl}</div><button ${S.pouvoir<cout||fait?'disabled':''} onclick="act('${a.id}')">${fait?'Fait':cout}</button></div>`;
+      if(cibles.length>1) ctrl=`<div class="cibles">${cibles.map(c=>`<button class="${c===cb?'on':''}" onclick="choisirCible('${a.id}','${c}')">${c}${c!==cb?' · '+coutAction(a,c):''}</button>`).join('')}</div>`;
+      if(cb==='personne') ctrl+=`<select class="sel" id="qui-${a.id}">${[...S.habs].sort((x,y)=>x.famille.localeCompare(y.famille)).map(h=>`<option value="${h.id}">${h.famille} · ${h.prenom}${h.prophete?' ✦':''} (${nomDieu(h.dieu)} ${h.foi}${h.besoin&&BESOINS[h.besoin].nom?', '+BESOINS[h.besoin].nom:''}${h.connait.joueur?'':', inconnu'})</option>`).join('')}</select>`;
+      if(cb==='famille') ctrl+=`<select class="sel" id="qui-${a.id}">${FAMILLES.map(f=>`<option value="${f}">Les ${f} (${S.habs.filter(h=>h.famille===f&&h.dieu==='joueur').length}/${S.habs.filter(h=>h.famille===f).length} te suivent)</option>`).join('')}</select>`;
+      s+=`<div class="act"><div class="top"><div><b>${a.nom}${fait?' ✓':''}</b><small>${a.desc}</small></div><button ${S.pouvoir<cout||fait?'disabled':''} onclick="act('${a.id}','${cb}')">${fait?'Fait':cout}</button></div>${ctrl}</div>`;
     });
   });
   return s;
 }
-function act(id){const sel=document.getElementById('fam-'+id); faireAction(id, sel?sel.value:null)}
+function choisirCible(id,c){cibleChoisie[id]=c;render();}
+function act(id,cible){const sel=document.getElementById('qui-'+id); faireAction(id, cible, sel?sel.value:null)}
 function renderChronique(){
-  let s='<h2>Chronique</h2>'+S.chronique.map(l=>`<div class="log"><small>J${l.j}</small>${l.t}</div>`).join('');
-  s+=`<div class="test">Outils de test — un jour de jeu = une heure réelle.<br>
-  <button onclick="testJour()">+1 jour</button><button onclick="testJour(7)">+7 jours</button><button onclick="if(confirm('Tout effacer et recommencer ?')){localStorage.removeItem(SAVE_KEY);S=null;render()}">Recommencer</button></div>`;
+  let s='<h2>Chronique</h2>'+S.chronique.map(l=>`<div class="log ${l.imp?'imp':''}"><small>${l.q}</small>${l.t}</div>`).join('');
+  s+=`<div class="test">Outils de test — une tranche = 10 minutes réelles, 6 tranches = 1 jour.<br>
+  <button onclick="testAv(1)">+1 tranche</button><button onclick="testAv(6)">+1 jour</button><button onclick="testAv(42)">+7 jours</button><button onclick="S.pouvoir+=20;save();render()">+20 pouvoir</button><button onclick="if(confirm('Tout effacer et recommencer ?')){localStorage.removeItem(SAVE_KEY);S=null;render()}">Recommencer</button></div>`;
   return s;
 }
-function testJour(n=1){for(let i=0;i<n;i++)jourSuivant(); save(); render();}
+function testAv(n){for(let i=0;i<n;i++)avancer(); save(); render();}
 
 function renderSetup(){
   const opts=o=>Object.entries(o).map(([k,v])=>`<option value="${k}">${v}</option>`).join('');
   app.innerHTML=`<div class="setup">
     <h1 style="margin:0 0 4px">Le jeu du dieu</h1>
-    <p style="color:var(--quiet);font-size:14px">Quelque part, un habitant déçu par son dieu vient de murmurer un nom qui n'existait pas encore. Le tien.</p>
+    <p style="color:var(--quiet);font-size:14px">Quelque part, un habitant déçu par son dieu vient de murmurer un nom qui n'existait pas encore. Le tien. Il sera ton prophète.</p>
     <label>Ton nom</label><input id="nom" placeholder="Ilyra, Vorn, Aëlis…" maxlength="18">
     <label>Ton élément — sur quoi tu agis</label><select id="element">${opts(ELEMENTS)}</select>
     <label>Ta valeur — ce que tu récompenses</label><select id="valeur">${opts(VALEURS)}</select>
     <label>Ta manière — comment tu agis</label><select id="maniere">${opts(MANIERES)}</select>
     <button class="go" onclick="demarrer()">Naître</button>
-    <p style="color:var(--quiet);font-size:12px;margin-top:20px">Prototype v${VERSION}. Tout se passe sur ce téléphone, un jour de jeu dure une heure réelle, et le village vit même quand tu n'es pas là.</p>
+    <p style="color:var(--quiet);font-size:12px;margin-top:20px">Prototype v${VERSION}. Tout se passe sur ce téléphone. Le monde avance toutes les dix minutes, même quand tu n'es pas là.</p>
   </div>`;
 }
 function demarrer(){
@@ -467,9 +567,11 @@ function demarrer(){
 
 /* ---------- démarrage ---------- */
 (function(){
-  try{ const s=localStorage.getItem(SAVE_KEY); if(s){ S=JSON.parse(s); rattraper(); } }catch(e){ S=null; }
+  try{ const s=localStorage.getItem(SAVE_KEY); if(s){ S=JSON.parse(s); if(S.version!==VERSION) S=null; } }catch(e){ S=null; }
+  if(S){ const n=rattraper(); if(n) setTimeout(()=>toast(`${n} tranche(s) ont passé pendant ton absence.`),300); }
   render();
-  setInterval(()=>{ if(S){ const avant=S.jour; rattraper(); if(S.jour!==avant) render(); } }, 60000);
+  setInterval(()=>{ if(S && rattraper()) render(); }, 30000);
+  document.addEventListener('visibilitychange',()=>{ if(!document.hidden && S && rattraper()) render(); });
 })();
 </script>
 </body>
