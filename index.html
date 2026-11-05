@@ -5,612 +5,758 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Le jeu du dieu</title>
 <style>
-:root{--bg:#14161c;--card:#1e2129;--line:#2d313c;--ink:#ecebe4;--quiet:#9a9c9a;--gold:#e0b45c;--good:#6fbf73;--bad:#d96b5c;--violet:#b48be0}
+:root{--bg:#0f1014;--card:#1b1d24;--line:#2d313c;--ink:#ecebe4;--quiet:#9a9c9a;--gold:#e0b45c;--rose:#e0197d;--good:#6fbf73;--bad:#d96b5c}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 system-ui,-apple-system,sans-serif;padding-bottom:70px}
-header{padding:10px 14px 8px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:5}
-header h1{margin:0;font-size:18px;display:flex;justify-content:space-between;align-items:baseline}
-header h1 small{font-size:11px;color:var(--quiet);font-weight:400}
-.stats{display:flex;gap:6px;margin-top:8px}
-.stat{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:4px 6px;font-size:12px;flex:1;text-align:center}
-.stat b{display:block;font-size:17px}
-.stat.gold b{color:var(--gold)}
-.stat.pro{border-color:var(--gold)}
-main{padding:14px}
-.tab{display:none}.tab.on{display:block}
-nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);z-index:6}
-nav button{flex:1;background:none;border:0;color:var(--quiet);padding:8px 2px 6px;font-size:12px;position:relative}
-nav button.on{color:var(--gold)}
-nav button span{display:block;font-size:20px}
-/* dialogue */
-.msg{margin-bottom:10px;max-width:94%}
-.msg.p{margin-right:auto}
-.msg.toi{margin-left:auto;text-align:right}
-.msg .b{display:inline-block;padding:10px 14px;border-radius:14px;background:var(--card);border:1px solid var(--line);text-align:left}
-.msg.toi .b{background:#4a3d1a;border-color:#6b5726}
-.msg.monde .b{background:transparent;border:0;color:var(--quiet);font-size:13px;padding:2px 0}
-.msg.imp .b{border-color:var(--gold)}
-.msg small.q{display:block;font-size:11px;color:var(--quiet);margin:0 0 3px 4px}
-.choix{margin:14px 0 6px;display:flex;flex-direction:column;gap:7px}
-.choix button{background:var(--card);border:1px solid var(--gold);color:var(--ink);border-radius:12px;padding:11px 14px;font-size:15px;text-align:left;display:flex;justify-content:space-between;gap:10px;align-items:center}
-.choix button small{color:var(--quiet);font-size:12px;text-align:right}
-.choix button.sec{border-color:var(--line);color:var(--quiet)}
-.choix button:disabled{opacity:.45}
-.choix button.lock{border-color:var(--line)}
-/* ville */
-h2{font-size:14px;color:var(--quiet);margin:18px 0 8px;text-transform:uppercase;letter-spacing:.5px}
-h2:first-child{margin-top:0}
-.gauge{margin-bottom:8px}
-.gauge div.lbl{display:flex;justify-content:space-between;font-size:13px}
-.bar{height:7px;background:#2b3040;border-radius:4px;overflow:hidden;margin-top:3px}
-.bar i{display:block;height:100%;background:var(--good)}
-.bar i.warn{background:var(--gold)}.bar i.bad{background:var(--bad)}
-.carte{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px}
-.carte h3{margin:0 0 6px;font-size:15px;display:flex;justify-content:space-between}
-.carte h3 small{color:var(--quiet);font-weight:400;font-size:12px}
-.mini{display:flex;gap:4px;margin-top:6px}
-.mini i{flex:1;height:5px;border-radius:3px;background:#2b3040;position:relative;overflow:hidden}
-.mini i b{position:absolute;left:0;top:0;bottom:0;background:var(--good)}
-.mini i b.warn{background:var(--gold)}.mini i b.bad{background:var(--bad)}
-.row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--line);font-size:14px;gap:8px}
-.row small{color:var(--quiet);display:block;font-size:12px}
-.foi{font-size:12px;padding:2px 7px;border-radius:9px;background:#2b3040;white-space:nowrap}
-.foi.me{background:#4a3d1a;color:var(--gold)}
-.foi.doubt{background:#4a2a2a;color:#f0a0a0}
-.retour{background:none;border:1px solid var(--line);color:var(--quiet);border-radius:8px;padding:6px 12px;margin-bottom:12px}
-.log{font-size:14px;padding:6px 0;border-bottom:1px solid var(--line)}
-.log small{color:var(--quiet);margin-right:6px;white-space:nowrap}
-.log.imp{color:var(--gold)}
-.setup{padding:20px 16px}
-.setup label{display:block;margin:14px 0 6px;color:var(--quiet);font-size:13px}
-.setup input,.setup select{width:100%;padding:10px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:16px}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,sans-serif;display:flex;flex-direction:column}
+header{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line)}
+header .nom{font-weight:600;font-size:16px}
+header .nom small{display:block;font-weight:400;font-size:11px;color:var(--quiet)}
+.compteurs{display:flex;gap:14px}
+.cpt{text-align:center;min-width:64px}
+.cpt b{display:block;font-size:22px;line-height:1;transition:transform .25s}
+.cpt.gold b{color:var(--gold)}
+.cpt.rose b{color:#ff6fb5}
+.cpt small{font-size:11px;color:var(--quiet)}
+.cpt.bump b{transform:scale(1.35)}
+.delta{position:absolute;font-size:14px;font-weight:600;animation:monte 1.2s forwards;pointer-events:none}
+@keyframes monte{0%{opacity:0;transform:translateY(6px)}20%{opacity:1}100%{opacity:0;transform:translateY(-26px)}}
+.scene{flex:1;display:flex;flex-direction:column;min-height:0}
+.portrait{flex:0 0 auto;height:34vh;max-height:300px;background:radial-gradient(ellipse at 50% 90%,#2a1a2a 0%,var(--bg) 70%);display:flex;align-items:flex-end;justify-content:center;overflow:hidden;position:relative}
+.portrait img{height:100%;object-fit:contain;filter:drop-shadow(0 0 24px rgba(224,25,125,.25))}
+.portrait .vide{color:var(--quiet);font-size:13px;padding-bottom:20px}
+.portrait .etat{position:absolute;right:12px;bottom:10px;font-size:12px;color:var(--quiet);background:rgba(0,0,0,.4);padding:3px 8px;border-radius:8px}
+.dialogue{flex:1;overflow:auto;padding:14px 16px 20px}
+.qui{font-size:12px;color:var(--rose);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.qui.monde{color:var(--quiet)}
+.texte{font-size:17px;line-height:1.5;min-height:60px;animation:fade .3s}
+.texte p{margin:0 0 10px}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.choix{margin-top:16px;display:flex;flex-direction:column;gap:8px}
+.choix button{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--gold);color:var(--ink);border-radius:10px;padding:11px 14px;font-size:15px;text-align:left;line-height:1.35}
+.choix button small{display:block;color:var(--quiet);font-size:12px;margin-top:2px}
+.choix button:active{background:#262a34}
+.choix button.suite{border-left-color:var(--line);color:var(--quiet);text-align:center}
+.choix button:disabled{opacity:.4}
+.setup{padding:24px 18px;max-width:480px;margin:auto}
+.setup h1{margin:0 0 6px;font-size:24px}
+.setup p{color:var(--quiet);font-size:14px}
+.setup label{display:block;margin:16px 0 6px;color:var(--quiet);font-size:13px}
+.setup input{width:100%;padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:17px}
 .setup .go{margin-top:24px;width:100%;padding:14px;background:var(--gold);border:0;border-radius:10px;font-size:17px;font-weight:600}
-.toast{position:fixed;left:50%;bottom:80px;transform:translateX(-50%);background:#2b3040;color:var(--ink);padding:10px 16px;border-radius:10px;font-size:14px;opacity:0;transition:opacity .3s;pointer-events:none;max-width:90%;text-align:center;z-index:9}
-.toast.on{opacity:1}
-.test{margin-top:24px;border-top:1px dashed var(--line);padding-top:12px;font-size:13px;color:var(--quiet)}
-.test button{background:#33363f;color:var(--ink);border:0;border-radius:8px;padding:8px 12px;margin:4px 4px 0 0}
+.setup .cont{background:none;border:1px solid var(--line);color:var(--quiet);width:100%;padding:12px;border-radius:10px;margin-top:10px}
+.fin{padding:24px 18px;text-align:center}
+.fin h1{font-size:22px;color:var(--gold)}
+.fin p{color:var(--ink);font-size:16px;text-align:left}
+.fin button{margin-top:20px;padding:12px 20px;background:var(--gold);border:0;border-radius:10px;font-size:16px;font-weight:600}
+.menu{position:absolute;left:12px;bottom:10px;font-size:11px;color:var(--quiet);background:rgba(0,0,0,.4);padding:3px 8px;border-radius:8px;border:0}
 </style>
 </head>
 <body>
-<div id="app"></div>
-<div class="toast" id="toast"></div>
+<div id="app" style="display:contents"></div>
 <script>
 /* ============================================================
-   LE JEU DU DIEU — prototype v4
-   Une ville en quartiers. Des jauges par famille.
-   Tu ne vois le monde que par ton prophète, et tu ne joues
-   qu'en lui parlant. Le temps appartient au monde.
+   LE JEU DU DIEU — v5, jeu narratif
+   Un écran : le prophète, sa réplique, tes choix.
+   Deux compteurs : ferveur, croyants.
    ============================================================ */
-const VERSION = 4;
-const TICK_MS = 10*60*1000;
-const TICKS_PAR_JOUR = 6;
-const SAVE_KEY = 'jeu-du-dieu-v4';
+const VERSION = 5;
+const SAVE_KEY = 'jeu-du-dieu-v5';
 
-const ELEMENTS = {eau:'Eau', feu:'Feu', terre:'Terre', vent:'Vent', lumiere:'Lumière', ombre:'Ombre'};
-const VALEURS  = {justice:'Justice', liberte:'Liberté', partage:'Partage', ambition:'Ambition', ordre:'Ordre', chaos:'Chaos'};
-const MANIERES = {doux:'Doux', brutal:'Brutal', visible:'Visible', discret:'Discret'};
-const SAISONS = [{n:'Printemps',k:1.1,e:'🌱'},{n:'Été',k:1.3,e:'☀️'},{n:'Automne',k:0.9,e:'🍂'},{n:'Hiver',k:0.45,e:'❄️'}];
-const JOURS_PAR_SAISON = 8;
+/* ---------- état ---------- */
+let S = null;
+const def = () => ({version:VERSION, nom:'', ferveur:0, croyants:1, foi:40, noeud:'j1_intro', jour:1, flags:{}, mort:[], ombre:0, histo:[]});
+function save(){ localStorage.setItem(SAVE_KEY, JSON.stringify(S)); }
+function flag(k){ return !!S.flags[k]; }
+function set(k,v=true){ S.flags[k]=v; }
 
-const PRENOMS = ['Marthe','Odile','Gaspard','Léon','Brune','Thibault','Aurèle','Mahaut','Colin','Sidonie','Baptiste','Rosalie','Anselme','Iris','Firmin','Jeanne','Ambroise','Lison','Barnabé','Hortense','Côme','Perrine','Eloi','Flavie','Armand','Blanche','Casimir','Delphine','Émile','Faustine','Gautier','Honorine','Isidore','Joséphine','Lazare','Marceline','Nestor','Ondine','Philibert','Quitterie','Rémi','Solange','Tancrède','Ursule','Victorin','Wilhelmine','Zéphyr','Agathe','Basile','Clotilde','Désiré','Eulalie','Fulbert','Garance','Hippolyte','Inès','Jules','Léonie','Marius','Noémie','Oscar','Prudence','Raoul','Sabine','Théodore','Valentine','Yvon','Zoé'];
-const NOMS = ['Vauclair','Moreau','Dufresne','Lambert','Roussel','Garnier','Perrault','Lenoir','Bonnet','Chevalier','Dumont','Fabre','Girard','Hamel','Joubert','Leclerc','Marchand','Noël','Olivier','Picard','Renard','Sauvage','Tessier','Valette','Baudry','Carlier','Delorme','Estève','Fournier','Gaillard'];
-const QUARTIERS = ['le Port','la Colline','les Halles','le Faubourg','les Jardins','la Forge'];
-const METIERS  = ['fermier','pêcheur','boulanger','forgeron','soigneur','soldat','marchand','tisserand','bûcheron','berger'];
-const EMOJI = {fermier:'🌾',pêcheur:'🎣',boulanger:'🍞',forgeron:'⚒️',soigneur:'🌿',soldat:'🛡️',marchand:'⚖️',tisserand:'🧵',bûcheron:'🪓',berger:'🐑'};
-const PRODUCTEURS = ['fermier','pêcheur','boulanger','berger'];
-const DIEUX_PNJ = [{id:'ormund', nom:'Ormund', titre:'le Vieux Dieu des Moissons'},{id:'selune', nom:'Sélune', titre:'la Dame des Eaux Calmes'}];
-const BESOINS = {affame:'a faim', malade:'malade', blesse:'blessé·e', menace:'menacé·e', querelle:'en querelle', pauvre:'ruiné·e', deuil:'en deuil'};
+/* ---------- le prophète ---------- */
+const P = {nom:'Aurèle Vauclair', metier:'médecin'};
+// Les textes utilisent {dieu} pour ton nom.
+const T = s => s.replace(/\{dieu\}/g, S.nom);
 
-/* ---------- catalogue ---------- */
-const SACRIFICES = [
-  {id:'priere', nom:'Prier à genoux sur la place', poids:10, ferveur:2, desc:'devant tout le monde ; on peut se moquer'},
-  {id:'jeune', nom:'Jeûner trois jours', poids:25, ferveur:5, desc:'il s\'affaiblit'},
-  {id:'animal', nom:'Offrir un animal', poids:30, ferveur:8, desc:'six vivres de moins pour sa famille'},
-  {id:'marche', nom:'Marcher jusqu\'au hameau voisin', poids:40, ferveur:6, desc:'il parle de toi à des inconnus ; peut se blesser'},
-  {id:'recolte', nom:'Offrir toute sa récolte', poids:50, ferveur:15, desc:'sa famille aura faim'},
-  {id:'bete', nom:'Affronter la bête', poids:60, ferveur:25, desc:'seulement si une bête rôde ; il peut mourir'},
-  {id:'enfant', nom:'Sacrifier son enfant', poids:90, ferveur:60, desc:'un des siens meurt ; tu t\'assombris'}
-];
-const DOGMES = [
-  {id:'louange', nom:'Louange quotidienne', poids:15, periode:6, ferveur:1, desc:'1 ferveur par fidèle et par jour'},
-  {id:'dime', nom:'Dîme hebdomadaire', poids:30, periode:42, ferveur:5, desc:'5 ferveur par fidèle ; leur argent baisse'},
-  {id:'offrande', nom:'Offrande d\'un animal par semaine', poids:35, periode:42, ferveur:10, desc:'10 ferveur par fidèle ; trois vivres de moins chacun'},
-  {id:'jeune', nom:'Jeûne hebdomadaire', poids:40, periode:42, ferveur:6, desc:'6 ferveur par fidèle ; leur santé baisse'}
-];
-const AIDES = [
-  {id:'nourrir', nom:'Nourris-les', cout:4, besoin:'affame', desc:'cinq vivres par personne'},
-  {id:'guerir', nom:'Guéris-les', cout:5, besoin:'malade', desc:'santé rendue, blessures refermées'},
-  {id:'proteger', nom:'Protège-les', cout:5, besoin:'menace', desc:'ni bête ni querelle pendant deux jours'},
-  {id:'enrichir', nom:'Enrichis-les', cout:4, besoin:'pauvre', desc:'trente pièces trouvées sous une pierre'},
-  {id:'consoler', nom:'Console-les', cout:2, besoin:'deuil', desc:'le deuil s\'apaise'}
-];
-const MIRACLES = [
-  {id:'pluie', nom:'Pluie bienfaisante', cout:{quartier:10, ville:28}, desc:'les greniers se remplissent'},
-  {id:'guerison', nom:'Grande guérison', cout:{quartier:14, ville:36}, desc:'tous les malades se relèvent'},
-  {id:'abondance', nom:'Abondance', cout:{quartier:12, ville:32}, desc:'les bourses se remplissent'},
-  {id:'protection', nom:'Protection', cout:{quartier:10, ville:26}, desc:'ni bête ni querelle pendant deux jours'},
-  {id:'fete', nom:'Fête en ton nom', cout:{ville:20}, desc:'tes fidèles festoient, les curieux viennent'}
-];
+/* ============================================================
+   LE RÉCIT
+   Chaque nœud : {qui:'p'|'monde', t:[paragraphes], c:[{l, s, fx:{ferveur,croyants,foi,ombre,flag,mort}, go}]}
+   fx est appliqué au clic, affiché sur les compteurs.
+   Un nœud peut être une fonction (noeud dynamique selon les flags).
+   ============================================================ */
+const N = {
 
-let S=null, tab='prophete', vue={q:null,f:null};
+/* ---------------- JOUR 1 — la naissance ---------------- */
+j1_intro: {qui:'monde', t:[
+  'Une ville de deux mille âmes, serrée entre la rivière et la colline. Deux dieux y règnent depuis toujours : Ormund, le Vieux Dieu des Moissons, dont le temple domine la place, et Sélune, la Dame des Eaux, qu\'on prie au port.',
+  'Toi, tu n\'as pas de temple. Tu n\'as pas de nom que quelqu\'un connaisse. Tu viens d\'ouvrir les yeux, et la première chose que tu vois, c\'est un homme assis sur un banc de pierre, derrière l\'hôpital des pauvres, à trois heures du matin.',
+  'Il a les cheveux blancs et roses, un stéthoscope autour du cou, une croix au bout d\'une chaîne. Il vient de perdre un patient. Il parle à voix basse, et il ne parle à personne. Il parle à toi.'
+], c:[{l:'Écouter.', go:'j1_aurele'}]},
 
-/* ---------- utilitaires ---------- */
-const rnd = n => Math.floor(Math.random()*n);
-const pick = a => a.length ? a[rnd(a.length)] : null;
-const clamp = (v,a,b)=>Math.max(a,Math.min(b,v));
-const shuffle = a => {for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]]}return a};
-function toast(t){const e=document.getElementById('toast');e.textContent=t;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('on'),2400)}
-function save(){localStorage.setItem(SAVE_KEY, JSON.stringify(S))}
-function heure(){return (S.tick%TICKS_PAR_JOUR)*4}
-function quand(){return `J${S.jour} · ${String(heure()).padStart(2,'0')}h`}
-function log(t,imp){S.chronique.unshift({q:quand(), t, imp:!!imp}); if(S.chronique.length>150) S.chronique.length=150}
-const nomH = h => `${h.prenom} ${fam(h).nom}`;
-const saison = () => SAISONS[Math.floor((S.jour-1)/JOURS_PAR_SAISON)%4];
-const fam = h => S.familles[h.fam];
-const membres = f => S.habs.filter(h=>h.fam===f.id);
-const famsDu = q => S.familles.filter(f=>f.quartier===q);
-const habsDu = q => S.habs.filter(h=>fam(h).quartier===q);
-const nomQ = qi => QUARTIERS[qi];
-const Maj = s => s.charAt(0).toUpperCase()+s.slice(1);
-function deQ(qi){ const q=QUARTIERS[qi]; return q.startsWith('le ')?'du '+q.slice(3):q.startsWith('les ')?'des '+q.slice(4):'de '+q.slice(3); }
-function dire(de,t,imp){ S.msgs.push({q:quand(),de,t,imp:!!imp}); if(S.msgs.length>60) S.msgs.splice(0,S.msgs.length-60); }
+j1_aurele: {qui:'p', t:[
+  'Tu sais quoi, Ormund ? Va te faire voir. Quarante ans que je te prie et quarante ans que tu laisses crever mes malades. Ce soir c\'était une gamine de six ans. Six ans. Elle m\'a demandé si tu allais venir. J\'ai dit oui.',
+  'J\'ai menti à une gamine de six ans.',
+  'Alors voilà. S\'il y a autre chose là-haut. N\'importe quoi. Un dieu de rechange, un dieu d\'occasion, je m\'en fous. Fais un signe. Un seul. Et je suis à toi.'
+], c:[
+  {l:'Faire tomber la croix de sa chaîne, sans bruit, dans sa main ouverte.', s:'un signe discret', fx:{foi:+15, ferveur:+1}, go:'j1_signe_doux'},
+  {l:'Faire s\'allumer d\'un coup toutes les lampes de l\'hôpital derrière lui.', s:'un signe que tout le monde verra', fx:{foi:+10, ferveur:+2, flag:'lampes'}, go:'j1_signe_fort'},
+  {l:'Ne rien faire. Attendre qu\'il parle encore.', s:'un dieu ne répond pas au premier venu', fx:{foi:-5}, go:'j1_silence'}
+]},
 
-/* ---------- création du monde ---------- */
-function nouvelHabitant(f, dieu, prenoms){
-  return {id:0, prenom:(prenoms||shuffle([...PRENOMS])).pop(), fam:f.id, metier:pick(METIERS),
-    dieu, foi:35+rnd(50), sante:100, besoin:null, besoinDepuis:0, blesse:0, deuil:0, connait:false, protege:0, prophete:false, disciple:false};
-}
-function nouveauMonde(dieu){
-  const familles=[], habs=[]; const noms=shuffle([...NOMS]); let prenoms=[];
-  S = {version:VERSION, jour:1, tick:0, derniereMaj:Date.now(), dieu, ferveur:3, caractere:0, dogmes:[], msgs:[], node:'racine', ctx:{},
-    quartiers:QUARTIERS.map(()=>({bete:0, conflit:null, conflitJours:0})), familles, habs, chronique:[], morts:0, fatigue:0, sacJour:0, alertes:{}};
-  QUARTIERS.forEach((q,qi)=>{
-    const nf=4+rnd(2);
-    for(let i=0;i<nf;i++){
-      const f={id:familles.length, nom:noms.pop(), quartier:qi, vivres:0, argent:20+rnd(40), protege:0};
-      familles.push(f);
-      const n=6+rnd(4); const dieuF = qi<4 ? 'ormund' : 'selune';
-      for(let k=0;k<n;k++){ if(!prenoms.length) prenoms=shuffle([...PRENOMS]); habs.push(nouvelHabitant(f, Math.random()<0.85?dieuF:(dieuF==='ormund'?'selune':'ormund'), prenoms)); }
-      f.vivres = 12*n + rnd(20);
-    }
-  });
-  habs.forEach((h,i)=>h.id=i);
-  familles.forEach(f=>{ const m=membres(f); if(!m.some(h=>PRODUCTEURS.includes(h.metier))) pick(m).metier=pick(PRODUCTEURS); });
-  const p = pick(habs.filter(h=>h.dieu==='ormund'));
-  p.dieu='joueur'; p.foi=55; p.prophete=true; p.connait=true;
-  log(`${nomH(p)}, déçu·e par Ormund, a murmuré ton nom pour la première fois.`, true);
-  dire('monde', `Une ville de ${habs.length} âmes, ${familles.length} familles, ${QUARTIERS.length} quartiers. Dans le quartier ${deQ(fam(p).quartier)}, ${nomH(p)}, ${p.metier}, vient de murmurer ton nom. Personne d'autre ne te connaît.`);
-  dire('p', `Es-tu vraiment là ? Ormund ne m'écoute plus. Si tu existes, dis-moi ce que tu veux de moi. Je ferai ce que je peux.`, true);
-  save();
-}
+j1_signe_doux: {qui:'p', t:[
+  'Il a regardé la croix dans sa paume pendant une bonne minute. La chaîne n\'était pas cassée. Elle était juste… ouverte.',
+  '« D\'accord. D\'accord. Je sais pas qui tu es. Mais t\'as entendu, et lui il a jamais entendu. Ça me suffit. »',
+  'Il a remis la croix autour de son cou. Il s\'est levé. « Il te faut un nom. Je vais pas prier "machin". »'
+], c:[{l:'Lui souffler ton nom.', go:'j1_nom'}]},
 
-/* ---------- lectures ---------- */
-const croyants = () => S.habs.filter(h=>h.dieu==='joueur');
-const prophete = () => S.habs.find(h=>h.prophete);
-const disciples = () => S.habs.filter(h=>h.disciple);
-const nomDieu = id => id==='joueur'? S.dieu.nom : DIEUX_PNJ.find(d=>d.id===id).nom;
-const attr = (k,v) => S.dieu[k]===v;
-const maxDogmes = () => { const p=prophete(); if(!p) return 0; return (p.foi<40?1:p.foi<70?2:3) + disciples().length; };
-const suitDogme = (h,d) => h.dieu==='joueur' && h.foi>=d.poids;
-const prodF = f => membres(f).filter(h=>PRODUCTEURS.includes(h.metier)&&!h.besoin).length*3*saison().k;
-function jaugesF(f){ const m=membres(f); const q=S.quartiers[f.quartier]; return {
-  nourriture: clamp(Math.round(100*(f.vivres/Math.max(1,m.length))/6),0,100),
-  securite: clamp(Math.round(100 - (q.bete>0&&f.protege<=0?50:0) - (q.conflit&&q.conflit.includes(f.id)&&f.protege<=0?40:0)),0,100),
-  sante: Math.round(m.reduce((a,h)=>a+h.sante,0)/Math.max(1,m.length)),
-  richesse: clamp(Math.round(f.argent*1.5),0,100) }; }
-function jaugesQ(qi){ const js=famsDu(qi).map(jaugesF); const moy=k=>Math.round(js.reduce((a,j)=>a+j[k],0)/Math.max(1,js.length)); return {nourriture:moy('nourriture'),securite:moy('securite'),sante:moy('sante'),richesse:moy('richesse')}; }
-const besoinsDe = f => membres(f).filter(h=>h.besoin);
+j1_signe_fort: {qui:'p', t:[
+  'Les trente fenêtres de l\'hôpital se sont allumées en même temps. Deux infirmières ont crié. Un vieux a hurlé au feu.',
+  'Lui, il n\'a pas bougé. Il a juste souri, un sourire qui n\'était pas très gentil. « Ah ouais. T\'es pas du genre discret, toi. Ça me va. Moi non plus. »',
+  '« Les gens vont dire que c\'est la foudre. Laisse-les. Moi je sais. Il te faut un nom. »'
+], c:[{l:'Lui souffler ton nom.', go:'j1_nom'}]},
 
-/* ---------- la simulation : une tranche ---------- */
-function recalculerBesoins(){
-  S.habs.forEach(h=>{
-    const f=fam(h), q=S.quartiers[f.quartier];
-    let b=null;
-    if(h.blesse>0) b='blesse';
-    else if(h.deuil>0) b='deuil';
-    else if(f.vivres<=0) b='affame';
-    else if(h.sante<40) b='malade';
-    else if(q.bete>0 && f.protege<=0 && h.protege<=0) b='menace';
-    else if(q.conflit && q.conflit.includes(f.id) && f.protege<=0) b='querelle';
-    else if(f.argent<4) b='pauvre';
-    if(b===h.besoin) h.besoinDepuis++; else { h.besoin=b; h.besoinDepuis=0; }
-  });
-}
-function moment(){
-  const evts=[];
-  S.fatigue=Math.max(0,S.fatigue-2);
-  S.familles.forEach(f=>{
-    const m=membres(f); const soigneurs=m.filter(h=>h.metier==='soigneur'&&h.sante>60).length;
-    const malades=m.filter(h=>h.sante<40).length;
-    m.forEach(h=>{
-      if(f.vivres<=0) h.sante-=2;
-      if(h.sante>=40 && Math.random()<0.04*malades) h.sante-=15;
-      const pMal=0.004+(saison().n==='Hiver'?0.004:0)+(f.vivres<=0?0.01:0);
-      if(h.sante>=40 && Math.random()<pMal) h.sante-=35;
-      if(['forgeron','bûcheron','fermier','soldat'].includes(h.metier)&&h.blesse<=0&&Math.random()<0.006){ h.blesse=8; h.sante-=15; }
-      if(h.blesse>0) h.blesse--; if(h.deuil>0) h.deuil--;
-      h.sante=clamp(h.sante+1+soigneurs*2,0,100);
-      if(h.protege>0) h.protege--;
-    });
-    if(f.protege>0) f.protege--;
-  });
-  S.habs.filter(h=>h.sante<=0).forEach(h=>mort(h, fam(h).vivres<=0?'mort·e de faim':'emporté·e par la fièvre'));
-  S.familles.forEach(f=>{ if(Math.random()<0.006){ f.argent=Math.max(0,f.argent-12); evts.push(`Des bandits ont dévalisé les ${f.nom}.`);} });
-  S.quartiers.forEach((q,qi)=>{
-    const fs=famsDu(qi), hs=habsDu(qi);
-    if(q.bete<=0 && Math.random()<0.012){ q.bete=3+rnd(4); evts.push(`Une bête rôde dans le quartier ${deQ(qi)}.`); }
-    if(q.bete>0){ const soldats=hs.filter(h=>h.metier==='soldat'&&!h.besoin).length; q.bete-=0.15+soldats*0.1; if(Math.random()<0.025){ const v=pick(hs.filter(h=>h.besoin==='menace')); if(v) mort(v,'emporté·e par la bête'); } if(q.bete<=0){ q.bete=0; evts.push(`La bête a été chassée ${deQ(qi)}.`);} }
-    if(!q.conflit && fs.length>1 && Math.random()<0.015){ const a=pick(fs), b=pick(fs.filter(x=>x!==a)); q.conflit=[a.id,b.id]; q.conflitJours=2; evts.push(`Les ${a.nom} et les ${b.nom} se sont disputé un pré ${deQ(qi)}.`); }
-    if(q.conflit && Math.random()<0.03){ const h=pick(hs.filter(x=>x.besoin==='querelle')); if(h){h.blesse=6;h.sante-=15; evts.push(`La querelle a tourné aux coups : ${nomH(h)} est blessé·e.`);} }
-  });
-  recalculerBesoins();
-  S.habs.forEach(h=>{ if(h.besoin) h.foi=clamp(h.foi-1,0,100); });
-  // dogmes
-  S.dogmes.forEach(id=>{
-    const d=DOGMES.find(x=>x.id===id); if(S.tick%d.periode!==0) return;
-    const fid=croyants().filter(h=>suitDogme(h,d)), tri=croyants().filter(h=>!suitDogme(h,d));
-    S.ferveur+=fid.length*d.ferveur;
-    fid.forEach(h=>{ const f=fam(h); if(id==='dime') f.argent=Math.max(0,f.argent-3); if(id==='offrande') f.vivres-=3; if(id==='jeune') h.sante-=12; });
-    tri.forEach(h=>h.foi=clamp(h.foi-2,0,100));
-    if(fid.length) evts.push(`${d.nom} : ${fid.length} fidèles, +${fid.length*d.ferveur} ferveur${tri.length?` (${tri.length} ont fait semblant)`:''}.`);
-  });
-  if(S.tick%TICKS_PAR_JOUR===0) croyants().forEach(h=>{ const suit=S.dogmes.some(id=>suitDogme(h,DOGMES.find(x=>x.id===id))); h.foi=clamp(h.foi+(suit?1:-1),0,100); });
-  // disciples et prophète dans leur quartier
-  disciples().forEach(dp=>{ const qi=fam(dp).quartier; const hs=habsDu(qi); if(Math.random()<0.4){ const h=pick(hs.filter(x=>!x.connait)); if(h)h.connait=true; } const d=pick(hs.filter(h=>h.dieu!=='joueur'&&h.foi<30&&h.connait)); if(d&&Math.random()<0.04) convertir(d); });
-  const p=prophete(); if(p && p.foi>50){ const d=pick(habsDu(fam(p).quartier).filter(h=>h.dieu!=='joueur'&&h.foi<30&&h.connait)); if(d&&Math.random()<0.03) convertir(d); }
-  // les dieux PNJ
-  DIEUX_PNJ.forEach(d=>{
-    const fid=S.habs.filter(h=>h.dieu===d.id); const pr=clamp(0.75 - fid.length/200, 0.15, 0.75);
-    fid.forEach(h=>{ const prie = h.besoin ? (h.besoinDepuis>=2 && Math.random()<0.4 ? h.besoin : null) : (Math.random()<0.05 ? 'petite' : null); if(!prie) return;
-      if(Math.random()<pr){ const f=fam(h); if(prie==='affame') f.vivres+=10; if(prie==='malade') h.sante=100; if(prie==='pauvre') f.argent+=15; if(prie==='menace') h.protege=12; h.foi=clamp(h.foi+10,0,100); } else h.foi=clamp(h.foi-(prie==='petite'?3:5),0,100); });
-    croyants().filter(h=>h.foi<30&&!h.prophete).forEach(h=>{ if(Math.random()<0.04){ h.dieu=d.id; h.foi=45; h.disciple=false; log(`${nomH(h)} est retourné·e vers ${d.nom}.`); dire('monde',`${nomH(h)} est retourné·e vers ${d.nom}.`); } });
-  });
-  S.habs.filter(h=>h.dieu!=='joueur'&&h.foi<22&&Math.random()<0.03).forEach(h=>{ h.dieu=DIEUX_PNJ.find(d=>d.id!==h.dieu).id; h.foi=45; });
-  recalculerBesoins();
-  evts.forEach(e=>{ log(e); dire('monde',e); });
-  nouvellesDuProphete();
-}
-function finDeJournee(){
-  S.familles.forEach(f=>{ const m=membres(f); f.vivres = f.vivres*0.97 + prodF(f) - m.length;
-    f.argent += m.filter(h=>h.metier==='marchand'&&!h.besoin).length*3 + m.filter(h=>['forgeron','tisserand','bûcheron'].includes(h.metier)&&!h.besoin).length*1.2 - m.length*0.4; });
-  // marché : qui manque achète à qui a trop
-  S.familles.filter(f=>f.vivres<0).forEach(f=>{ const n=membres(f).length; const vend=S.familles.filter(x=>x.vivres>4*membres(x).length).sort((a,b)=>b.vivres-a.vivres)[0]; if(vend){ const q=Math.floor(Math.min(-f.vivres+n, vend.vivres-3*membres(vend).length, f.argent)); if(q>0){ f.vivres+=q; vend.vivres-=q; f.argent-=q; vend.argent+=q; } } if(f.vivres<0) f.vivres=0; });
-  S.familles.forEach(f=>{ f.argent=clamp(f.argent,0,120); });
-  S.quartiers.forEach(q=>{ if(q.conflit){ q.conflitJours--; if(q.conflitJours<=0){ const [a,b]=q.conflit.map(id=>S.familles[id].nom); log(`Les ${a} et les ${b} ont enterré la hache.`); q.conflit=null; } } });
-  if(S.caractere<0) S.caractere+=0.15;
-  S.sacJour=0;
-  if(croyants().length===0){ const d=pick(S.habs.filter(h=>h.foi<30&&h.connait)); if(d&&Math.random()<0.4){d.dieu='joueur';d.foi=50;d.prophete=true;log(`${nomH(d)}, déçu·e, s'est souvenu·e de toi.`, true); dire('p',`Je suis ${nomH(d)}. On m'a parlé de toi. Mon dieu ne répond plus. Que veux-tu de moi ?`,true);} else if(!S.habs.some(h=>h.connait)){ pick(S.habs).connait=true; } }
-  const sNew=saison(); if((S.jour-1)%JOURS_PAR_SAISON===0) dire('monde', `${sNew.e} ${sNew.n}. ${sNew.n==='Hiver'?'Les champs dorment, les réserves fondent.':sNew.n==='Été'?'Les récoltes sont belles.':''}`);
-  log(`Jour ${S.jour} — ${croyants().length} croyant·s, ${S.ferveur} ferveur.`);
-}
-function mort(h, cause){
-  if(!S.habs.includes(h)) return;
-  log(`${nomH(h)} est ${cause}.`, true); dire('monde', `${nomH(h)} est ${cause}.`, true); S.morts++;
-  const f=fam(h); S.habs.splice(S.habs.indexOf(h),1); S.habs.forEach((x,k)=>x.id=k);
-  membres(f).slice(0,3).forEach(x=>{x.deuil=6;});
-  if(h.prophete){ const c=pick(croyants().sort((a,b)=>b.foi-a.foi).slice(0,3)); if(c){c.prophete=true; c.disciple=false; dire('p',`Je suis ${nomH(c)}. ${h.prenom} n'est plus. Je reprends sa parole, si tu veux de moi.`,true); log(`${nomH(c)} reprend la parole du prophète.`);} S.node='racine'; S.ctx={}; }
-  const nb=nouvelHabitant(f, pick(['ormund','selune'])); nb.id=S.habs.length; nb.foi=50; nb.connait=membres(f).some(x=>x.connait); S.habs.push(nb);
-}
-function avancer(){ S.tick++; moment(); if(S.tick%TICKS_PAR_JOUR===0){ S.jour++; finDeJournee(); } }
-function rattraper(){ let ticks=Math.floor((Date.now()-S.derniereMaj)/TICK_MS); if(ticks<=0) return 0; const n=Math.min(ticks, 6*TICKS_PAR_JOUR*5); for(let i=0;i<n;i++) avancer(); S.derniereMaj+=ticks*TICK_MS; save(); return n; }
+j1_silence: {qui:'p', t:[
+  'Rien. Le vent. Une porte qui bat quelque part.',
+  'Il a ri, un rire fatigué. « Évidemment. Personne. » Il s\'est levé, il a fait trois pas vers la porte.',
+  'Et il s\'est arrêté. Parce qu\'il avait senti, dans son dos, quelque chose qui le regardait. Pas Ormund. Pas Sélune. Autre chose. « …T\'es là, hein. T\'es là et tu dis rien. Bon. Ça aussi ça me va. Mais il te faut un nom. »'
+], c:[{l:'Lui souffler ton nom.', go:'j1_nom'}]},
 
-/* ---------- ce que le prophète dit de lui-même à chaque tranche ---------- */
-function nouvellesDuProphete(){
-  const p=prophete(); if(!p) return;
-  const dits=[];
-  if(p.besoin && p.besoinDepuis===0){ dits.push({affame:'Je n\'ai rien mangé depuis deux jours. Je tiendrai, mais pas longtemps.',malade:'La fièvre me tient. Si tu veux encore d\'un prophète, aide-moi.',blesse:'Je saigne. Je ne peux plus marcher pour toi.',menace:'La bête a tourné autour de ma maison cette nuit.',querelle:'Ma famille est prise dans la querelle. On me regarde de travers.',pauvre:'Nous n\'avons plus rien. J\'ai tout donné.',deuil:'Nous avons enterré quelqu\'un des miens.'}[p.besoin]); }
-  QUARTIERS.forEach((q,qi)=>{ const j=jaugesQ(qi); const cle='q'+qi; const pire=Math.min(j.nourriture,j.sante,j.securite); if(pire<35 && (!S.alertes[cle]||S.tick-S.alertes[cle]>12)){ S.alertes[cle]=S.tick; const quoi=j.nourriture===pire?'a faim':j.sante===pire?'tousse et brûle de fièvre':'vit dans la peur'; const pf=famsDu(qi).sort((a,b)=>{const ja=jaugesF(a),jb=jaugesF(b);return Math.min(ja.nourriture,ja.sante,ja.securite)-Math.min(jb.nourriture,jb.sante,jb.securite)})[0]; dits.push(`Le quartier ${deQ(qi)} ${quoi}, surtout les ${pf.nom}.`); } });
-  if(dits.length) dire('p', dits.slice(0,2).join(' '));
-}
+j1_nom: {qui:'p', t:[
+  '« {dieu}. » Il l\'a dit deux fois, pour voir comment ça sonnait. « {dieu}. Bon. C\'est pas pire qu\'Ormund. »',
+  '« Je m\'appelle Aurèle Vauclair. Je suis médecin. Enfin, médecin des pauvres, ceux que les autres veulent pas. Je bois trop, je dors pas, et à partir de ce soir, je suis ton prophète. Premier et dernier croyant de {dieu}. »',
+  '« Demain je retourne à l\'hôpital. Et là-bas, il y a des gens qui meurent. Alors dis-moi, {dieu} : qu\'est-ce que tu sais faire ? »'
+], c:[
+  {l:'« Je peux guérir. Mais pas gratuitement. »', s:'la voie du médecin', fx:{flag:'voie_soin'}, go:'j1_fin'},
+  {l:'« Je peux leur faire peur. La peur fait prier. »', s:'la voie de l\'ombre', fx:{ombre:+1, flag:'voie_peur'}, go:'j1_fin'},
+  {l:'« Je ne sais pas encore. Montre-moi la ville. »', s:'la voie du regard', fx:{foi:+3}, go:'j1_fin'}
+]},
 
-/* ---------- actions (instantanées, par le prophète) ---------- */
-function convertir(h){ const ancien=nomDieu(h.dieu); h.dieu='joueur'; h.foi=50; h.connait=true; log(`${nomH(h)} a quitté ${ancien} pour te suivre.`, true); dire('monde',`${nomH(h)} a quitté ${ancien}. ${croyants().length} te suivent.`); membres(fam(h)).forEach(x=>{ if(Math.random()<0.6) x.connait=true; }); }
-function fatiguer(n){ S.fatigue+=n; const p=prophete(); if(S.fatigue>8){ p.foi=clamp(p.foi-1,0,100); return true; } return false; }
-function visiterFamille(f){
-  const p=prophete(); const m=membres(f); const fat=fatiguer(2); const pConv=clamp((p.foi-30)/180,0.05,0.3)*(fat?0.5:1);
-  let conv=0, dout=0;
-  shuffle([...m]).slice(0,3).forEach(h=>{ if(Math.random()<0.7) h.connait=true; if(h.dieu!=='joueur'){ h.foi=clamp(h.foi-3,0,100); if(h.foi<30){ dout++; if(h.connait&&Math.random()<pConv){ convertir(h); conv++; } } } else h.foi=clamp(h.foi+5,0,100); });
-  const fid=m.filter(h=>h.dieu==='joueur').length;
-  let t=`Je suis allé chez les ${f.nom}. `;
-  const b=besoinsDe(f); if(b.length) t+=`${b.slice(0,2).map(h=>`${h.prenom} ${BESOINS[h.besoin]}`).join(', ')}${b.length>2?`, et d'autres`:''}. `;
-  if(conv) t+=`${conv===1?'Un des leurs':conv+' des leurs'} te suit désormais. `;
-  else if(dout) t+=`${dout} doutent de leur dieu, mais ils ne sont pas prêts. `;
-  else if(fid) t+=`${fid} des leurs te suivent déjà. `;
-  else t+=`Ils m'ont écouté poliment. `;
-  if(fat) t+='Je suis épuisé.';
-  if(p.foi<40 && Math.random()<0.1){ p.foi=clamp(p.foi-2,0,100); t+=' On s\'est moqué de moi en partant.'; }
-  return t;
-}
-function convaincre(h){
-  const p=prophete(); fatiguer(1); const pConv=clamp((p.foi-20)/150,0.08,0.45);
-  h.connait=true; h.foi=clamp(h.foi-6,0,100);
-  if(h.foi<30 && Math.random()<pConv){ convertir(h); return `${h.prenom} a pleuré, puis m'a suivi. ${h.prenom} est à toi.`; }
-  if(h.foi<30) return `${h.prenom} doute, mais a peur. Reviens, ou donne-lui une raison.`;
-  return `${h.prenom} tient encore à ${nomDieu(h.dieu)}, et m'a écouté sans rien dire.`;
-}
-function consoler(h){
-  fatiguer(1); h.connait=true;
-  if(['deuil','querelle','pauvre'].includes(h.besoin)||(['malade','blesse'].includes(h.besoin)&&Math.random()<0.35)){ soigner(h,h.besoin); h.foi=clamp(h.foi+(h.dieu==='joueur'?12:-8),0,100); return `${h.prenom} va mieux. Je suis resté un moment.`; }
-  h.foi=clamp(h.foi+(h.dieu==='joueur'?5:-4),0,100); return `Je suis resté avec ${h.prenom}. Ça n'a rien changé, mais on s'en souviendra.`;
-}
-function soigner(h,b){ const f=fam(h); if(b==='affame') f.vivres+=5; if(b==='malade'||b==='blesse'){ h.sante=100; h.blesse=0; } if(b==='menace'){ h.protege=12; } if(b==='querelle'){ h.protege=6; } if(b==='pauvre') f.argent+=15; if(b==='deuil') h.deuil=0; h.besoin=null; h.besoinDepuis=0; }
-function aiderFamille(f, aide){
-  const m=membres(f); if(S.ferveur<aide.cout) return 'Pas assez de ferveur.';
-  S.ferveur-=aide.cout;
-  if(aide.id==='nourrir') f.vivres+=5*m.length;
-  if(aide.id==='guerir') m.forEach(h=>{h.sante=100;h.blesse=0;});
-  if(aide.id==='proteger') f.protege=12;
-  if(aide.id==='enrichir') f.argent+=30;
-  if(aide.id==='consoler') m.forEach(h=>h.deuil=0);
-  m.forEach(h=>{ h.connait=true; if(h.dieu==='joueur') h.foi=clamp(h.foi+15,0,100); else { h.foi=clamp(h.foi-5,0,100); if(h.foi<30&&Math.random()<0.2) convertir(h); } });
-  recalculerBesoins(); log(`Aide aux ${f.nom} : ${aide.nom.toLowerCase()} (${aide.cout} ferveur).`);
-  return `C'est fait. Chez les ${f.nom}, on te bénit ce soir.`;
-}
-function demanderSacrifice(h, sa){
-  const estP=h.prophete;
-  if(sa.id==='bete' && S.quartiers[fam(h).quartier].bete<=0) return 'Aucune bête ne rôde par ici.';
-  const marge=h.foi+rnd(21)-10;
-  if(marge<sa.poids){ h.foi=clamp(h.foi-3,0,100); return estP?pick(['Non. Je ne peux pas. Pas encore.','Tu me demandes trop. Je n\'ai pas cette force.','Je… non. Demande-moi autre chose.']):`${h.prenom} a refusé. ${h.foi<20?'Je crois qu\'on l\'a perdu.':'Pas encore prêt.'}`; }
-  const f=fam(h); let txt='';
-  if(sa.id==='priere'){ txt='à genoux sur la place, à voix haute. '; if(Math.random()<0.25){ txt+='On s\'est moqué. '; h.foi=clamp(h.foi-3,0,100);} else { shuffle(habsDu(f.quartier).filter(x=>!x.connait)).slice(0,2).forEach(x=>x.connait=true); txt+='Deux passants ont retenu ton nom. '; } }
-  if(sa.id==='jeune'){ h.sante-=25; txt='trois jours sans manger, en silence. '; }
-  if(sa.id==='animal'){ f.vivres-=6; txt='sa meilleure bête menée à l\'autel. La fumée est montée. '; }
-  if(sa.id==='marche'){ txt='parti à l\'aube vers le hameau. '; shuffle(S.habs.filter(x=>!x.connait)).slice(0,3).forEach(x=>x.connait=true); if(Math.random()<0.2){ h.blesse=8; h.sante-=15; txt+='Revenu en boitant. '; } else txt+='Trois inconnus connaissent ton nom. '; }
-  if(sa.id==='recolte'){ f.vivres=Math.max(0,f.vivres-20); txt='toute la récolte brûlée en ton honneur. Les siens auront faim. '; habsDu(f.quartier).forEach(x=>{ if(Math.random()<0.4) x.connait=true; }); }
-  if(sa.id==='bete'){ if(Math.random()<0.2){ S.ferveur+=5; const nom=h.prenom; mort(h,'tué·e par la bête, un bâton à la main'); return `${nom} y est allé. ${nom} n'est pas revenu. +5 ferveur pour ce courage.`; } S.quartiers[f.quartier].bete=0; habsDu(f.quartier).forEach(x=>{ if(Math.random()<0.5) x.connait=true; }); txt='revenu couvert de sang, la bête morte derrière. Tout le quartier a vu. '; }
-  if(sa.id==='enfant'){ const v=pick(membres(f).filter(x=>x!==h&&!x.prophete)); if(!v) return 'Il n\'a plus de famille.'; txt=`${v.prenom} est mort·e sur l'autel. `; S.caractere-=3; membres(f).forEach(x=>{ if(x!==h&&x!==v) x.foi=clamp(x.foi-30,0,100); }); S.habs.forEach(x=>{ x.connait=true; if(x.dieu!=='joueur'&&x.foi>60) x.foi-=5; }); mort(v,'sacrifié·e sur l\'autel'); }
-  S.ferveur+=sa.ferveur; S.sacJour++;
-  h.foi=clamp(h.foi+Math.round(sa.poids/8)+2-(S.sacJour>2?4:0),0,100);
-  recalculerBesoins(); log(`Sacrifice de ${nomH(h)} : ${sa.nom.toLowerCase()} (+${sa.ferveur} ferveur).`);
-  const pre = estP ? pick(['C\'est fait : ','Je l\'ai fait pour toi : ','Voilà : ']) : `${h.prenom} l'a fait : `;
-  return pre+txt+`+${sa.ferveur} ferveur.`+(S.sacJour>2?' Tu demandes beaucoup pour une seule journée.':'');
-}
-function precher(qi){
-  const p=prophete(); const fat=fatiguer(3);
-  if((p.foi<50&&Math.random()<0.4)||(fat&&Math.random()<0.5)){ p.foi=clamp(p.foi-4,0,100); return 'On m\'a jeté des trognons. Je suis rentré.'; }
-  const n=2+Math.floor(p.foi/25); shuffle(habsDu(qi).filter(h=>!h.connait)).slice(0,n).forEach(h=>h.connait=true);
-  habsDu(qi).filter(h=>h.dieu!=='joueur'&&h.connait).forEach(h=>h.foi=clamp(h.foi-1,0,100));
-  return `J'ai parlé ${deQ(qi)}. ${n} personnes se sont arrêtées pour écouter.`;
-}
-function miracle(m, portee, qi){
-  let cout=m.cout[portee]; if(m.id==='pluie'&&attr('element','eau')) cout-=3; if(m.id==='abondance'&&attr('element','terre')) cout=Math.round(cout*0.75); cout=Math.max(1,cout);
-  if(S.ferveur<cout) return 'Pas assez de ferveur.';
-  S.ferveur-=cout;
-  const fs = portee==='ville'?S.familles:famsDu(qi); const hs = portee==='ville'?S.habs:habsDu(qi);
-  const lum=attr('element','lumiere')?1.6:1; const temoins=n=>shuffle(hs.filter(h=>!h.connait)).slice(0,Math.round(n*lum)).forEach(h=>h.connait=true);
-  let t='';
-  if(m.id==='pluie'){ fs.forEach(f=>f.vivres+=3*membres(f).length); temoins(6); t='Une pluie douce a gonflé les épis. Les greniers respirent.'; if(Math.random()<0.2){ const f=pick(fs); f.argent=Math.max(0,f.argent-10); t+=` Trop d'eau chez les ${f.nom} : leur maison est inondée.`; } }
-  if(m.id==='guerison'){ let n=0; hs.forEach(h=>{ if(h.sante<40||h.blesse>0){h.sante=100;h.blesse=0;n++;h.connait=true; if(h.dieu!=='joueur') h.foi=clamp(h.foi-10,0,100);} }); temoins(n); t=n?`${n} malades se sont relevés d'un coup. Les gens se regardent, étonnés.`:'Personne n\'était malade. Le miracle est passé inaperçu.'; }
-  if(m.id==='abondance'){ fs.forEach(f=>f.argent+=15); temoins(5); t='Les échoppes se remplissent, les bourses aussi.'; }
-  if(m.id==='protection'){ fs.forEach(f=>f.protege=12); if(portee==='ville') S.quartiers.forEach(q=>q.bete=0); else S.quartiers[qi].bete=0; t='Une quiétude étrange est tombée sur les maisons.'; }
-  if(m.id==='fete'){ croyants().forEach(h=>h.foi=clamp(h.foi+10,0,100)); S.familles.forEach(f=>f.vivres-=0.6*membres(f).length); temoins(10); S.habs.filter(h=>h.dieu!=='joueur'&&h.connait).forEach(h=>h.foi=clamp(h.foi-4,0,100)); t='On a dansé en ton nom jusque tard dans la nuit.'; }
-  prophete().foi=clamp(prophete().foi+3,0,100); recalculerBesoins();
-  log(`Miracle : ${m.nom.toLowerCase()} ${portee==='ville'?'sur la ville':deQ(qi)} (${cout} ferveur).`);
-  return t;
-}
-function toggleDogme(d){
-  const p=prophete();
-  if(S.dogmes.includes(d.id)){ S.dogmes=S.dogmes.filter(x=>x!==d.id); return 'Ce sera dit demain à la louange. Certains seront soulagés.'; }
-  if(S.dogmes.length>=maxDogmes()) return `Je ne peux faire respecter que ${maxDogmes()} dogme${maxDogmes()>1?'s':''} pour l'instant. Il me faudrait des disciples.`;
-  if(p.foi+rnd(21)-10 < d.poids){ p.foi=clamp(p.foi-4,0,100); return 'Ils ne m\'écouteront pas. Je ne suis pas assez sûr de toi pour leur demander ça.'; }
-  S.dogmes.push(d.id); const s=croyants().filter(h=>suitDogme(h,d)).length; log(`Dogme instauré : ${d.nom.toLowerCase()}.`, true);
-  return `C'est dit. ${s} sur ${croyants().length} suivront. Les autres feront semblant, et je le saurai.`;
-}
+j1_fin: {qui:'monde', t:[
+  'Il est rentré chez lui à l\'aube. Avant de s\'endormir, il a fait une chose qu\'il n\'avait pas faite depuis vingt ans : il a prié. Pas Ormund. Toi.',
+  'Et pour la première fois, tu as senti quelque chose te traverser. Un point de ferveur. Un seul. C\'est le poids d\'un homme qui croit.'
+], c:[{l:'Jour 2', go:'j2_hopital', fx:{ferveur:+1, jour:2}}]},
 
-/* ---------- LE DIALOGUE ---------- */
-// noeud() rend {t: ce que dit le prophète, c:[{l, s, go, do, ctx, sec, lock}]}
-function noeud(){
-  const p=prophete(); const n=S.node, c=S.ctx;
-  if(!p) return {t:'…', c:[]};
-  const retour=(go,l)=>({l:l||'← Retour', go:go||'racine', sec:true});
-  const famsEnDiff = S.familles.filter(f=>besoinsDe(f).length).sort((a,b)=>besoinsDe(b).length-besoinsDe(a).length);
-  const douteursConnus = S.habs.filter(h=>h.dieu!=='joueur'&&h.foi<30&&h.connait);
-  if(n==='racine'){
-    const nb=famsEnDiff.length;
-    return {t: pick(['Que veux-tu de moi ?','Je t\'écoute.','Me voici. Parle.','Dis-moi où aller.']), c:[
-      {l:'Il y a du nouveau ?', s:`${nb} famille${nb>1?'s':''} en difficulté`, go:'nouvelles'},
-      {l:'Va quelque part.', s:'un quartier, une famille, une personne', go:'quartiers'},
-      {l:'J\'ai une chose à te demander.', s:'un sacrifice, pour toi', go:'sacrifice', ctx:{qui:p.id}},
-      {l:'Parlons de la religion.', s:`${S.dogmes.length}/${maxDogmes()} dogmes · ${disciples().length} disciple${disciples().length>1?'s':''}`, go:'religion'},
-      {l:'Fais un miracle.', s:`${S.ferveur} ferveur`, go:'miracles', ctx:{q:undefined}},
-      {l:'Parle-moi de toi.', s:`foi ${p.foi}${p.besoin?' · '+BESOINS[p.besoin]:''}${S.fatigue>8?' · épuisé':''}`, go:'toi'}
-    ]};
+/* ---------------- JOUR 2 — l'hôpital ---------------- */
+j2_hopital: {qui:'p', t:[
+  'Salle commune de l\'hôpital des pauvres. Vingt lits, trente malades. Ça sent la fièvre et le chou bouilli.',
+  '« Bon. Au fond à gauche, Marthe Lenoir, la boulangère du port, une pneumonie, elle en a pour trois jours si personne fait rien. À droite, le petit Colin Moreau, douze ans, une jambe cassée qui s\'infecte, on va la couper demain. Et au milieu, la mère Garnier, qui n\'a rien du tout mais qui vient ici parce qu\'elle a personne. »',
+  '« J\'ai deux mains et une nuit. Toi t\'as quoi ? »'
+], c:[
+  {l:'« Guéris Marthe. Discrètement. Et dis-lui qui l\'a sauvée. »', s:'2 ferveur · une boulangère parle à tout le port', fx:{ferveur:-2, flag:'marthe'}, go:'j2_marthe'},
+  {l:'« Sauve la jambe du gamin. Devant tout le monde. »', s:'2 ferveur · trente témoins', fx:{ferveur:-2, flag:'colin'}, go:'j2_colin'},
+  {l:'« Assieds-toi avec la mère Garnier. Ça ne coûte rien. »', s:'gratuit', fx:{foi:+5, flag:'garnier'}, go:'j2_garnier'},
+  {l:'« Ne fais rien. Laisse Ormund échouer. On ramassera les déçus. »', s:'la voie de l\'ombre', fx:{ombre:+1, foi:-8}, go:'j2_rien'}
+]},
+
+j2_marthe: {qui:'p', t:[
+  'Je lui ai posé la main sur le front et j\'ai dit ton nom tout bas. Elle a toussé une dernière fois et elle s\'est endormie comme un bébé. Ce matin elle voulait rentrer faire son pain.',
+  'Je lui ai dit : « C\'est pas moi. C\'est {dieu}. » Elle a demandé qui c\'était. J\'ai dit : « Celui qui t\'a entendue quand les autres dormaient. »',
+  'Elle est repartie au port. Et une boulangère, ça parle à cinquante personnes par jour.'
+], c:[{l:'Continuer.', fx:{croyants:+1}, go:'j2_fin'}]},
+
+j2_colin: {qui:'p', t:[
+  'J\'ai enlevé le pansement. La jambe était noire jusqu\'au genou. J\'ai dit ton nom à voix haute, trente personnes ont tourné la tête, et j\'ai posé la main dessus.',
+  'Elle est redevenue rose. Comme ça. Le gamin a hurlé, pas de douleur, de peur. Sa mère s\'est mise à genoux. Deux vieux ont fait le signe d\'Ormund, par réflexe, puis ils se sont regardés : ce n\'était pas Ormund.',
+  'La moitié de la salle a demandé ton nom avant midi. L\'autre moitié a demandé à changer d\'hôpital.'
+], c:[{l:'Continuer.', fx:{croyants:+3, flag:'remarque'}, go:'j2_fin'}]},
+
+j2_garnier: {qui:'p', t:[
+  'Je me suis assis sur son lit. Elle m\'a raconté son mari, mort il y a onze ans, et ses deux fils partis à la ville d\'en bas. Elle m\'a tenu la main une heure.',
+  'À la fin elle a dit : « Vous êtes un brave homme, docteur. » J\'ai dit : « Non. Mais je connais quelqu\'un qui écoute. » Elle a souri. Elle n\'a rien promis.',
+  'Marthe Lenoir est morte dans la nuit. Et demain on coupe la jambe du gamin. Tu as choisi la vieille. Je ne dis pas que c\'était mal.'
+], c:[{l:'Continuer.', fx:{mort:'Marthe Lenoir'}, go:'j2_fin'}]},
+
+j2_rien: {qui:'p', t:[
+  'Alors j\'ai rien fait. J\'ai regardé. Le prêtre d\'Ormund est passé à midi, il a béni les lits, il a pris la pièce, il est reparti. Marthe est morte le soir. Le gamin a perdu sa jambe.',
+  'Sa mère a craché sur la statue d\'Ormund en sortant. Elle ne sait pas encore à qui prier à la place. Mais elle cherche.',
+  'Tu avais raison : les déçus sont là. J\'ai juste du mal à te regarder en face ce soir.'
+], c:[{l:'Continuer.', fx:{mort:'Marthe Lenoir', flag:'moreau_decus'}, go:'j2_fin'}]},
+
+j2_fin: {qui:'monde', t:[
+  'Le soir, Aurèle a prié. Et quelqu\'un d\'autre, quelque part dans la ville, a prononcé ton nom sans trop savoir pourquoi.',
+  'La ferveur monte avec ceux qui croient. Chaque croyant t\'en rapporte un peu chaque jour. Mais un croyant qui n\'obtient jamais rien finit par partir.'
+], c:[{l:'Jour 3', go:'j3_pretre', fx:{jour:3}}]},
+
+/* ---------------- JOUR 3 — le prêtre d'Ormund ---------------- */
+j3_pretre: {qui:'p', t:[
+  'Visite ce matin. Le père Anselme, grand prêtre d\'Ormund, en personne, avec deux moines derrière lui. Il n\'avait jamais mis les pieds à l\'hôpital des pauvres.',
+  '« Docteur Vauclair. On me dit que vous invoquez un nom nouveau. On me dit que des malades guérissent sans qu\'Ormund soit prié. Vous comprenez que ça pose un problème. »',
+  'Il m\'a proposé un marché : je reviens dans le giron d\'Ormund, je dis que les guérisons étaient les siennes, et le temple finance l\'hôpital. Cent lits. Des médicaments. Du vrai.'
+], c:[
+  {l:'« Refuse. Dis-lui que {dieu} ne se vend pas. »', s:'il perd le temple pour toujours', fx:{foi:+10, ferveur:+2, flag:'pretre_ennemi'}, go:'j3_refus'},
+  {l:'« Accepte. Prends l\'argent. On verra après. »', s:'la ruse', fx:{foi:-10, flag:'pretre_marche'}, go:'j3_marche'},
+  {l:'« Dis-lui de venir voir de ses yeux. Et guéris quelqu\'un devant lui. »', s:'3 ferveur · un coup de poker', fx:{ferveur:-3}, go:'j3_poker'}
+]},
+
+j3_refus: {qui:'p', t:[
+  'Je lui ai dit que {dieu} n\'avait pas besoin de ses lits, et que s\'il voulait voir un miracle il n\'avait qu\'à arrêter de prendre la pièce aux mourants.',
+  'Il est devenu tout blanc. Il a dit : « Vous venez de vous faire un ennemi, docteur. » J\'ai dit que j\'en avais déjà un, et qu\'il s\'appelait Ormund.',
+  'Les deux moines ont ri. Un seul. L\'autre m\'a regardé bizarrement en partant. Je crois qu\'il a retenu ton nom.'
+], c:[{l:'Continuer.', fx:{croyants:+1}, go:'j3_fin'}]},
+
+j3_marche: {qui:'p', t:[
+  'J\'ai dit oui. J\'ai signé. J\'ai dit que les guérisons étaient à Ormund. Et j\'ai eu envie de vomir.',
+  'L\'argent arrive la semaine prochaine. Cent lits. Je sais que c\'est pour les malades. Je sais que tu me l\'as demandé.',
+  'Mais Marthe Lenoir va dire partout qu\'Ormund l\'a sauvée. Et moi je vais devoir hocher la tête.'
+], c:[{l:'Continuer.', fx:{croyants:-1}, go:'j3_fin'}]},
+
+j3_poker: {qui:'p', t:[
+  'Je l\'ai emmené au fond de la salle. Un ouvrier du port, Firmin Roussel, le dos cassé par une poutre, qui ne bougeait plus les jambes depuis un mois. Le père Anselme l\'avait béni deux fois.',
+  'J\'ai dit ton nom. J\'ai posé la main. Firmin s\'est levé.',
+  'Le prêtre n\'a rien dit. Il est sorti. Mais un des deux moines est resté. Il s\'appelle Barnabé. Il a demandé s\'il pouvait revenir demain. Et Firmin, lui, il te suit déjà : il a vu.'
+], c:[{l:'Continuer.', fx:{croyants:+2, flag:'barnabe', flag2:'firmin'}, go:'j3_fin'}]},
+
+j3_fin: {qui:'monde', t:[
+  'Ce soir-là, au temple d\'Ormund, le père Anselme a fait sonner les cloches une heure de plus que d\'habitude. Pour rappeler à la ville qui était le dieu ici.',
+  'Personne n\'a trouvé ça rassurant.'
+], c:[{l:'Jour 4', go:'j4_sacrifice', fx:{jour:4}}]},
+
+/* ---------------- JOUR 4 — le prix ---------------- */
+j4_sacrifice: {qui:'p', t:[
+  'Bon. Faut qu\'on parle. Je sens quand tu agis : ça vient de quelque part, et ce quelque part, c\'est moi. Chaque fois que tu guéris, je suis un peu plus vide. Je me trompe ?',
+  '…Non. Je me trompe pas. Alors dis-moi ce que tu veux. Je sais ce qu\'Ormund demandait : des moutons. Des cierges. Des pièces. Toi, tu veux quoi ? Qu\'est-ce que je te donne ?'
+], c:[
+  {l:'« Ta nuit. Dors sur le parvis, dehors, pour qu\'on te voie prier. »', s:'il s\'humilie en public · +4 ferveur', fx:{ferveur:+4, foi:+5, flag:'sac_parvis'}, go:'j4_parvis'},
+  {l:'« Ta bouteille. Arrête de boire. Pour moi. »', s:'un sacrifice qui dure · +3 ferveur, puis chaque jour', fx:{ferveur:+3, foi:+8, flag:'sobre'}, go:'j4_bouteille'},
+  {l:'« Ton sang. Ouvre-toi la main sur l\'autel d\'Ormund, devant tout le monde. »', s:'brutal · +8 ferveur', fx:{ferveur:+8, foi:+3, ombre:+1, flag:'sac_sang'}, go:'j4_sang'},
+  {l:'« Rien. Je ne demande rien. »', s:'il ne comprend pas', fx:{foi:-10}, go:'j4_rien'}
+]},
+
+j4_parvis: {qui:'p', t:[
+  'Je l\'ai fait. Toute la nuit sur les marches du temple d\'Ormund, à genoux, à dire ton nom à voix basse. Il a plu à partir de deux heures.',
+  'Des gens sont passés. Certains ont ri. Un gamin m\'a jeté un trognon. Et vers quatre heures, une femme s\'est agenouillée à côté de moi sans rien dire. Je ne la connais pas. Elle est repartie avant l\'aube.',
+  'Je suis trempé, j\'ai mal partout, et je ne me suis jamais senti aussi sûr de toi.'
+], c:[{l:'Continuer.', fx:{croyants:+1}, go:'j4_fin'}]},
+
+j4_bouteille: {qui:'p', t:[
+  'J\'ai vidé les trois bouteilles dans l\'évier. Ça m\'a pris un quart d\'heure parce que je m\'arrêtais à chaque fois.',
+  'Tu sais ce que c\'est, trente ans ? C\'est la première nuit depuis trente ans où j\'ai dormi sans. J\'ai pas dormi, d\'ailleurs. J\'ai tremblé jusqu\'au matin.',
+  'Mais je t\'ai eu dans la tête toute la nuit. Ça compte comme une prière, j\'imagine. Et demain ce sera pareil. Et après-demain.'
+], c:[{l:'Continuer.', go:'j4_fin'}]},
+
+j4_sang: {qui:'p', t:[
+  'Midi, place du temple, jour de marché. J\'ai monté les marches, j\'ai sorti mon scalpel, et je me suis ouvert la paume sur l\'autel d\'Ormund en criant ton nom.',
+  'Trois cents personnes. Un silence que je n\'oublierai pas. Puis les cris. Les moines ont voulu me faire descendre, deux ouvriers du port les en ont empêchés. Firmin Roussel était avec eux.',
+  'Le sang a coulé sur la pierre d\'Ormund. Ça ne s\'efface pas. Ils ont essayé toute l\'après-midi. Toute la ville connaît ton nom ce soir. Et toute la ville a peur de toi.'
+], c:[{l:'Continuer.', fx:{croyants:+3, flag:'remarque'}, go:'j4_fin'}]},
+
+j4_rien: {qui:'p', t:[
+  'Rien ? Un dieu qui ne demande rien ?',
+  'Tu sais ce que ça fait, à un croyant ? Ça lui dit que ce qu\'il a ne vaut rien. Ormund demandait des moutons, c\'était con, mais au moins on savait qu\'on comptait.',
+  'Je vais continuer à te prier. Mais je ne sais plus trop pourquoi.'
+], c:[{l:'Continuer.', go:'j4_fin'}]},
+
+j4_fin: {qui:'monde', t:[
+  'La ferveur ne tombe pas du ciel. Elle vient de ce qu\'on te donne. Plus le don coûte, plus tu reçois.',
+  'Et plus Aurèle donne, plus sa foi grandit. Un homme qui s\'est sacrifié pour un dieu ne peut plus se permettre de ne pas y croire.'
+], c:[{l:'Jour 5', go:'j5_bete', fx:{jour:5}}]},
+
+/* ---------------- JOUR 5 — la bête ---------------- */
+j5_bete: {qui:'p', t:[
+  'On a retrouvé le berger des Dufresne ce matin, dans le pré de la colline. Enfin, ce qu\'il en restait. Et huit moutons.',
+  'Le père Anselme dit que c\'est un loup. Les gens de la colline disent que ce n\'est pas un loup, parce qu\'un loup ne laisse pas des traces comme ça. Grosses comme une assiette.',
+  'La colline est le quartier d\'Ormund depuis toujours. Ils ont prié toute la journée. Ce soir, ils ont encore peur. Et moi, {dieu}, je suis médecin, pas chasseur.'
+], c:[
+  {l:'« Monte à la colline. Dis-leur que {dieu} les protège. Et protège-les vraiment. »', s:'6 ferveur · la bête ne les touchera pas', fx:{ferveur:-6, flag:'colline_protegee'}, go:'j5_protege'},
+  {l:'« Va chasser la bête toi-même. Cette nuit. »', s:'il peut mourir', fx:{foi:+5}, go:'j5_chasse'},
+  {l:'« Laisse-la faire. Quand Ormund aura échoué trois nuits, ils viendront à nous. »', s:'la voie de l\'ombre', fx:{ombre:+1}, go:'j5_laisse'},
+  {l:'« Dis-leur que c\'est Ormund qui l\'a envoyée. »', s:'un mensonge qui marche', fx:{ombre:+1, ferveur:+2}, go:'j5_mensonge'}
+], cond:()=>true},
+
+j5_protege: {qui:'p', t:[
+  'Je suis monté à la colline avec ma trousse et une lanterne. J\'ai fait le tour des fermes, j\'ai dit ton nom sur chaque porte, j\'ai tracé ta croix à la craie.',
+  'La bête est venue. On l\'a entendue. Elle a tourné autour des fermes toute la nuit en grognant, et elle n\'a pas pu entrer. Au matin, les traces s\'arrêtaient toutes à un mètre des portes.',
+  'La colline était à Ormund depuis mille ans. Ce matin, quatre familles ont décroché son signe. Elles n\'ont pas encore accroché le tien. Mais elles savent qui a tenu la porte.'
+], c:[{l:'Continuer.', fx:{croyants:+5}, go:'j5_fin'}]},
+
+j5_chasse: {qui:'p', t:[
+  'Je suis parti avec le fusil du vieux Dufresne, qui n\'avait pas servi depuis la guerre. J\'ai attendu dans le pré. Il faisait un froid de chien.',
+  'Elle est venue à trois heures. Je ne te dirai pas à quoi elle ressemblait, parce que je ne suis pas sûr. Grande. Trop de pattes. J\'ai tiré deux fois, je l\'ai touchée une fois, elle m\'a ouvert le bras de l\'épaule au coude.',
+  'Elle est repartie en boitant. Moi aussi. Mais ce matin la colline entière sait que le médecin de {dieu} est monté seul là où les moines d\'Ormund n\'ont pas osé aller.'
+], c:[{l:'Continuer.', fx:{croyants:+3, foi:+5, flag:'bras_blesse'}, go:'j5_fin'}]},
+
+j5_laisse: {qui:'p', t:[
+  'J\'ai rien fait. Trois nuits. La bête a pris deux autres bergers et la petite dernière des Dufresne, neuf ans, qui était sortie chercher le chien.',
+  'Au quatrième matin, les Dufresne sont descendus à l\'hôpital. Le père tenait encore le manteau de la gamine. Il a dit : « Ormund n\'a rien fait. Est-ce que le vôtre fait quelque chose ? »',
+  'J\'ai dit oui. Il m\'a cru. Ils te suivent tous, maintenant. Je n\'arrive pas à être content.'
+], c:[{l:'Continuer.', fx:{croyants:+4, foi:-8, mort:'la petite Dufresne'}, go:'j5_fin'}]},
+
+j5_mensonge: {qui:'p', t:[
+  'Je l\'ai dit au marché. « La bête, c\'est Ormund qui l\'envoie, parce que la colline a laissé le médecin de {dieu} guérir ses malades. Il vous punit. »',
+  'C\'est faux. Je le sais. Mais c\'est le genre de faux qui ressemble à du vrai. Le soir même, trois familles ont jeté le signe d\'Ormund dans la rivière.',
+  'Et le père Anselme a fait prêcher sur la place que c\'était moi, le monstre. Il n\'a pas tout à fait tort.'
+], c:[{l:'Continuer.', fx:{croyants:+3, flag:'pretre_ennemi'}, go:'j5_fin'}]},
+
+j5_fin: {qui:'monde', t:[
+  'La bête est toujours là, quelque part sur la colline. Elle reviendra.',
+  'Mais pour la première fois, ce n\'est pas au temple d\'Ormund qu\'on a prié pour l\'éloigner.'
+], c:[{l:'Jour 6', go:'j6_barnabe', fx:{jour:6}}]},
+
+/* ---------------- JOUR 6 — le disciple ---------------- */
+j6_barnabe: ()=>({qui:'p', t:[
+  flag('barnabe') ? 'Barnabé est revenu. Le petit moine d\'Ormund, celui qui était resté quand le père Anselme est sorti. Il a enlevé sa robe. Il l\'a pliée, posée sur le lit de Firmin, et il a dit : « Je veux apprendre. »'
+                  : 'Un gars est venu ce matin. Barnabé. Un moine d\'Ormund, enfin, un ancien. Il a jeté sa robe sur le lit et il a dit : « J\'ai entendu ce qui se passe ici. Je veux apprendre. »',
+  'Il a vingt ans. Il sait lire, écrire, et il connaît tous les rites d\'Ormund par cœur. Il dit qu\'il n\'a jamais rien senti en les faisant. Il dit que la nuit où j\'ai prié sur le parvis, lui, il a senti quelque chose.',
+  'Je peux en faire quelque chose. Mais ça dépend de toi : c\'est quoi, un disciple de {dieu} ?'
+], c:[
+  {l:'« Un médecin. Apprends-lui à soigner. »', s:'les disciples guérissent', fx:{flag:'disc_soin', foi:+3}, go:'j6_soin'},
+  {l:'« Une voix. Apprends-lui à parler. Il ira dans les quartiers où tu ne vas pas. »', s:'les disciples prêchent', fx:{flag:'disc_voix'}, go:'j6_voix'},
+  {l:'« Un espion. Qu\'il garde sa robe et retourne au temple. »', s:'la voie de l\'ombre', fx:{ombre:+1, flag:'disc_espion'}, go:'j6_espion'},
+  {l:'« Je n\'ai pas besoin de disciple. J\'ai toi. »', s:'il reste seul', fx:{foi:+5}, go:'j6_seul'}
+]}),
+
+j6_soin: {qui:'p', t:[
+  'Je lui ai appris à nettoyer une plaie, à reconnaître une fièvre qui tue d\'une fièvre qui passe, et à dire ton nom avant de poser les mains.',
+  'Il n\'a pas mes mains. Mais il a quelque chose que je n\'ai pas : il y croit sans avoir eu besoin d\'un signe. Il a guéri une angine ce soir. Tout seul. Il a pleuré.',
+  'Deux prophètes valent mieux qu\'un. Enfin, un prophète et demi.'
+], c:[{l:'Continuer.', fx:{croyants:+1, ferveur:+1}, go:'j6_fin'}]},
+
+j6_voix: {qui:'p', t:[
+  'Je lui ai dit de descendre au port, là où les gens me connaissent de nom mais ne m\'ont jamais vu, et de raconter. Pas de prêcher : raconter. Marthe, Firmin, le gamin Moreau.',
+  'Il est revenu le soir avec douze noms. Douze personnes qui veulent qu\'on vienne les voir. Il a une voix qui porte, ce petit. Mieux que la mienne, qui est rouillée par le tabac.',
+  'Le port était à Sélune. Sélune n\'a pas de prêtre, elle a des vieilles qui jettent des fleurs dans l\'eau. Elle va être facile à remplacer. Trop facile, peut-être.'
+], c:[{l:'Continuer.', fx:{croyants:+4}, go:'j6_fin'}]},
+
+j6_espion: {qui:'p', t:[
+  'Il a remis sa robe. Il est retourné au temple avec une tête de moine contrit, et le père Anselme l\'a repris, parce que le père Anselme ne sait pas refuser un repentant.',
+  'Ce soir il m\'a glissé un papier sous la porte. Le temple prépare quelque chose. Une procession. Un grand miracle d\'Ormund, monté de toutes pièces, pour la fin du mois.',
+  'On a un homme à l\'intérieur. Je ne suis pas fier. Mais je suis content.'
+], c:[{l:'Continuer.', fx:{ferveur:+2}, go:'j6_fin'}]},
+
+j6_seul: {qui:'p', t:[
+  'Je lui ai dit non. Il n\'a pas compris. Il est resté une heure sur le banc dehors, puis il est parti vers le port.',
+  'Je pense qu\'il va continuer à parler de toi quand même. Mais sans qu\'on le lui ait demandé, et sans savoir quoi dire. On verra ce que ça donne.',
+  'Toi et moi, alors. Ça me va. Ça m\'a toujours été.'
+], c:[{l:'Continuer.', go:'j6_fin'}]},
+
+j6_fin: {qui:'monde', t:[
+  'Au temple, le père Anselme a commencé à prononcer ton nom dans ses sermons. Pour le maudire. C\'est encore de la publicité.'
+], c:[{l:'Jour 7', go:'j7_dogme', fx:{jour:7}}]},
+
+/* ---------------- JOUR 7 — le premier dogme ---------------- */
+j7_dogme: ()=>({qui:'p', t:[
+  `On est ${S.croyants} à te suivre, maintenant. Ça commence à faire du monde. Et du monde, ça demande des règles. Ils me demandent : « Qu\'est-ce qu\'il faut faire ? Il faut prier quand ? Il faut donner quoi ? »`,
+  'Ormund avait un livre. Sélune a des chansons. Toi, tu as moi, et je suis nul pour les règles.',
+  'Alors dis-moi. Le premier commandement de {dieu}. Celui que tous tes croyants devront suivre.'
+], c:[
+  {l:'« Chaque jour, une prière. Rien de plus. »', s:'léger · +1 ferveur par croyant et par jour', fx:{flag:'dogme_priere'}, go:'j7_priere'},
+  {l:'« Chaque semaine, un repas offert à qui a faim. »', s:'coûteux pour eux · +2 par croyant, et la ville t\'aime', fx:{flag:'dogme_repas'}, go:'j7_repas'},
+  {l:'« Chaque mois, du sang sur l\'autel. »', s:'lourd · +4 par croyant, et la ville a peur', fx:{flag:'dogme_sang', ombre:+1}, go:'j7_sang'},
+  {l:'« Aucune règle. Qu\'ils fassent ce qu\'ils veulent. »', s:'la liberté · 0 ferveur', fx:{flag:'dogme_libre'}, go:'j7_libre'}
+]}),
+
+j7_priere: {qui:'p', t:[
+  'Une prière par jour. Je leur ai dit : le matin, en se levant, avant de parler à quelqu\'un. Dire ton nom et une chose vraie.',
+  'C\'est simple. Tout le monde peut. Et chaque matin, maintenant, je te sens arriver par petites touches, une par maison. C\'est doux. C\'est pas beaucoup. Mais ça ne s\'arrête jamais.'
+], c:[{l:'Continuer.', go:'j7_fin'}]},
+
+j7_repas: {qui:'p', t:[
+  'Un repas par semaine, offert à quelqu\'un qui n\'a rien. Je leur ai dit : ce n\'est pas à {dieu} que vous donnez, c\'est à votre voisin. Et {dieu} compte.',
+  'Firmin Roussel a nourri un gamin du port le soir même. Marthe fait un pain de plus chaque jour. Ça coûte. Ça se voit. Et ceux qui reçoivent demandent qui est ce dieu qui nourrit.',
+  'Le père Anselme a dit que c\'était de la démagogie. C\'est le meilleur compliment qu\'il m\'ait fait.'
+], c:[{l:'Continuer.', fx:{croyants:+2}, go:'j7_fin'}]},
+
+j7_sang: {qui:'p', t:[
+  'Je leur ai dit. Chaque mois, une goutte de leur sang sur la pierre que j\'ai posée derrière l\'hôpital. Pas plus. Mais le leur.',
+  'Trois sont partis tout de suite. Les autres sont restés, et ceux qui sont restés ont une foi qui fait peur. Firmin a dit : « Enfin un dieu qui prend quelque chose de vrai. »',
+  'Dans la ville on commence à nous appeler les Saigneurs. Je ne sais pas si c\'est une insulte.'
+], c:[{l:'Continuer.', fx:{croyants:-3, ferveur:+6, foi:+5}, go:'j7_fin'}]},
+
+j7_libre: {qui:'p', t:[
+  'Aucune règle. Je leur ai dit : {dieu} ne demande rien, soyez juste là. Ils ont trouvé ça bien. Reposant.',
+  'Et le lendemain, la moitié avait oublié de prier. Pas par méchanceté. Parce que rien ne le leur rappelait. Un dieu qui ne demande rien est un dieu qu\'on oublie.',
+  'Je continue, moi. Mais je suis le seul à qui ça coûte quelque chose.'
+], c:[{l:'Continuer.', fx:{croyants:-2}, go:'j7_fin'}]},
+
+j7_fin: {qui:'monde', t:[
+  'Fin de la première semaine. Le temple d\'Ormund a perdu des fidèles pour la première fois depuis sa construction. Le père Anselme a demandé une audience au gouverneur.',
+  'Ce que tu as instauré se répètera, chaque jour, pour chaque croyant. C\'est ton revenu. Et c\'est leur fardeau.'
+], c:[{l:'Jour 8', go:'j8_epidemie', fx:{jour:8}}]},
+
+/* ---------------- JOUR 8 — l'épidémie ---------------- */
+j8_epidemie: {qui:'p', t:[
+  'Ça a commencé aux Halles. Une fièvre rouge. Trois morts hier, onze aujourd\'hui. Elle monte vers la colline et descend vers le port. Dans une semaine, ce sera toute la ville.',
+  'Le temple a fermé ses portes. Les moines prient à l\'intérieur. Le père Anselme a dit que c\'était une épreuve envoyée par Ormund pour punir les infidèles. Il a dit ton nom.',
+  'J\'ai soixante malades dans un hôpital de vingt lits. Et je sais que tu peux. Mais je sais aussi ce que ça coûte.'
+], c:[
+  {l:'« Guéris-les tous. Tous. Quoi qu\'il en coûte. »', s:'toute ta ferveur · la ville entière saura', fx:{ferveurTout:true, flag:'guerison_totale'}, go:'j8_tous'},
+  {l:'« Guéris seulement les nôtres. Que les autres voient la différence. »', s:'4 ferveur · cruel, mais efficace', fx:{ferveur:-4, ombre:+1}, go:'j8_notres'},
+  {l:'« Soigne avec tes mains, pas avec moi. Montre-leur un homme. »', s:'gratuit · il va s\'épuiser', fx:{foi:+5}, go:'j8_mains'},
+  {l:'« Guéris les enfants. Seulement les enfants. »', s:'5 ferveur · un choix qu\'on n\'oublie pas', fx:{ferveur:-5}, go:'j8_enfants'}
+]},
+
+j8_tous: ()=>({qui:'p', t:[
+  'J\'ai fait le tour de la ville. Les Halles, la colline, le port, le faubourg. Chaque maison où ça toussait. J\'ai dit ton nom sur chaque front, et j\'ai senti, à chaque fois, quelque chose en toi qui s\'épuisait.',
+  'À la fin je n\'avais plus rien. Toi non plus. Mais la fièvre rouge était partie. Pas un mort de plus. Pas un.',
+  S.croyants > 15 ? 'La ville entière est sortie dans les rues. Ils ne savaient pas quoi faire. Alors ils ont dit ton nom. Pas comme une prière. Comme un merci.' : 'Les gens sont sortis dans les rues, hébétés. Ils ne savaient pas qui remercier. Certains ont remercié Ormund, par habitude. Les autres ont demandé mon nom, puis le tien.'
+], c:[{l:'Continuer.', fx:{croyants:+12, foi:+10}, go:'j8_fin'}]}),
+
+j8_notres: {qui:'p', t:[
+  'J\'ai guéri les nôtres. Tous. Marthe, Firmin, les Moreau, les Dufresne. Pas une seule maison de {dieu} n\'a eu un mort.',
+  'Et dans les maisons d\'Ormund, ils sont morts. Vingt-trois en quatre jours. On entendait les cloches toute la journée.',
+  'Le cinquième jour, il y avait une file devant l\'hôpital. Pas des malades. Des gens qui voulaient changer de dieu avant d\'être malades. Je les ai pris. Tous. Je ne sais pas ce qu\'on est devenus.'
+], c:[{l:'Continuer.', fx:{croyants:+9, foi:-5, mort:'vingt-trois habitants des Halles'}, go:'j8_fin'}]},
+
+j8_mains: {qui:'p', t:[
+  'Pas de miracle. Des compresses, de l\'eau bouillie, des nuits blanches. Barnabé et moi, et deux infirmières qui ne croient en rien, on a tenu l\'hôpital six jours.',
+  'On en a perdu dix-huit. On en a sauvé quarante-deux. Sans toi. Enfin, avec ton nom à chaque lit, mais sans tes mains.',
+  'Je suis crevé. Je ne tiens plus debout. Mais ceux qu\'on a sauvés savent que ce n\'est pas tombé du ciel. Ils savent qu\'un homme de {dieu} est resté. Ça vaut peut-être plus qu\'un miracle. Je ne sais pas. Je vais dormir.'
+], c:[{l:'Continuer.', fx:{croyants:+5, foi:+10, mort:'dix-huit malades'}, go:'j8_fin'}]},
+
+j8_enfants: {qui:'p', t:[
+  'Les enfants. Tous les enfants de la ville, d\'Ormund, de Sélune ou de personne. Trente-six. Pas un seul n\'est mort.',
+  'Les adultes, eux, sont morts comme ils devaient mourir. Quatorze. Dont la mère Garnier, qui est venue me voir avant, et qui m\'a dit : « C\'est bien, docteur. Prenez les petits. »',
+  'Il y a une chose qu\'on ne pardonne pas à un dieu, c\'est de laisser mourir les enfants. Tu ne l\'as pas fait. Toute la ville l\'a compris. Même le père Anselme a fermé sa bouche.'
+], c:[{l:'Continuer.', fx:{croyants:+8, foi:+5, mort:'la mère Garnier'}, go:'j8_fin'}]},
+
+j8_fin: {qui:'monde', t:[
+  'Après la fièvre rouge, la ville n\'était plus la même. Le temple d\'Ormund a rouvert ses portes, mais la place devant est restée vide.',
+  'Et pour la première fois, quelqu\'un a écrit ton nom sur un mur.'
+], c:[{l:'Jour 9', go:'j9_gouverneur', fx:{jour:9}}]},
+
+/* ---------------- JOUR 9 — le gouverneur ---------------- */
+j9_gouverneur: {qui:'p', t:[
+  'Convocation au palais. Le gouverneur Tancrède Olivier. Un gros homme qui ne croit en rien d\'autre que le calme, et qui n\'aime pas ce qui bouge.',
+  '« Docteur. Je me fiche de votre dieu. Je me fiche d\'Ormund. Ce que je n\'aime pas, c\'est qu\'on a eu trois bagarres cette semaine entre vos gens et les leurs, et que le père Anselme me demande votre tête. »',
+  '« Je vous propose un arrangement. Votre dieu a le droit d\'exister. Officiellement. Un quartier à vous, le faubourg. En échange, vous ne mettez plus les pieds sur la place du temple, et vous payez l\'impôt des cultes. »'
+], c:[
+  {l:'« Accepte. Un quartier officiel, c\'est un début. »', s:'la prudence · le faubourg est à toi', fx:{croyants:+4, flag:'faubourg', ferveur:-3}, go:'j9_accepte'},
+  {l:'« Refuse. {dieu} ne se laisse pas parquer. »', s:'le courage · le gouverneur devient un ennemi', fx:{foi:+8, flag:'gouv_ennemi'}, go:'j9_refuse'},
+  {l:'« Demande la place du temple. Rien de moins. »', s:'l\'audace · il faut quelque chose pour l\'impressionner', fx:{ferveur:-8}, go:'j9_audace'},
+  {l:'« Dis-lui que sa femme est malade, et qu\'elle ne le sait pas encore. »', s:'tu le sais, lui non', fx:{ombre:+1, foi:-3}, go:'j9_femme'}
+]},
+
+j9_accepte: {qui:'p', t:[
+  'J\'ai signé. Le faubourg. Quatre rues, trois cents personnes, des tanneurs, des tisserands, et une église abandonnée qu\'on nous laisse.',
+  'Barnabé a nettoyé l\'église en deux jours. Pas d\'autel. Juste un banc, comme celui derrière l\'hôpital. Les gens du faubourg sont venus voir. Ils n\'avaient jamais eu de dieu à eux.',
+  'C\'est petit. C\'est légal. C\'est à toi.'
+], c:[{l:'Continuer.', go:'j9_fin'}]},
+
+j9_refuse: {qui:'p', t:[
+  'J\'ai dit non. J\'ai dit que {dieu} n\'avait pas demandé de permission pour guérir la fièvre rouge et qu\'il n\'en demanderait pas pour exister.',
+  'Il m\'a fait sortir par les gardes. Le soir, deux hommes du palais sont venus à l\'hôpital « vérifier les licences ». Ils ont cassé trois fenêtres.',
+  'Le lendemain, il y avait cinquante personnes devant l\'hôpital pour empêcher qu\'ils reviennent. Je ne les avais pas appelées.'
+], c:[{l:'Continuer.', fx:{croyants:+3}, go:'j9_fin'}]},
+
+j9_audace: {qui:'p', t:[
+  'J\'ai demandé la place du temple. Il a ri. Alors j\'ai posé la main sur sa table, j\'ai dit ton nom, et la table de chêne a fleuri. Des bourgeons sur le bois mort. Il a arrêté de rire.',
+  '« …Le faubourg et les Halles. Et je ne veux plus jamais voir ça dans mon bureau. »',
+  'Deux quartiers. Et un gouverneur qui a peur de toi. Je ne sais pas si c\'est mieux qu\'un gouverneur qui t\'aime. Mais ça marche.'
+], c:[{l:'Continuer.', fx:{croyants:+7, flag:'faubourg', flag2:'halles'}, go:'j9_fin'}]},
+
+j9_femme: {qui:'p', t:[
+  'Je lui ai dit. « Votre femme a une grosseur sous le bras gauche. Elle ne vous l\'a pas dit. Dans six mois elle sera morte. Dans six mois, ou demain, si {dieu} le veut. »',
+  'Il est devenu gris. Il a dit : « Qu\'est-ce que vous voulez ? » J\'ai dit : « Rien. Je guéris votre femme ce soir. Et vous vous souviendrez de qui l\'a fait. »',
+  'Je l\'ai guérie. Il n\'a pas dit merci. Mais la convocation a été annulée, et le père Anselme n\'a plus d\'audience au palais. On tient le gouverneur. Par le ventre, comme on dit.'
+], c:[{l:'Continuer.', fx:{ferveur:-3, flag:'gouv_tenu'}, go:'j9_fin'}]},
+
+j9_fin: {qui:'monde', t:[
+  'La ville a maintenant trois dieux. Un vieux, une discrète, et un nouveau dont on ne sait pas encore très bien s\'il faut l\'aimer ou le craindre.'
+], c:[{l:'Jour 10', go:'j10_doute', fx:{jour:10}}]},
+
+/* ---------------- JOUR 10 — le doute ---------------- */
+j10_doute: ()=>({qui:'p', t:[
+  'Je vais te dire un truc que je ne t\'ai jamais dit.',
+  'Hier soir, un gamin est mort. Pas de la fièvre. D\'une connerie, une charrette, la rue des Halles. Il avait huit ans. Je l\'ai eu dans les bras, j\'ai dit ton nom, j\'ai posé les mains. Et rien.',
+  'Rien. Pour la première fois, rien. Alors je te demande, {dieu}, et je veux la vérité : est-ce que tu ne pouvais pas, ou est-ce que tu n\'as pas voulu ?'
+], c:[
+  {l:'« Je ne pouvais pas. Il était déjà parti. »', s:'la vérité', fx:{foi:+5}, go:'j10_verite'},
+  {l:'« Je ne voulais pas. Il faut que la ville sache que je ne sauve pas tout le monde. »', s:'une autre vérité', fx:{foi:-5, ombre:+1}, go:'j10_dur'},
+  {l:'« Tu étais fatigué. Ce n\'est pas moi qui ai échoué. »', s:'le mensonge', fx:{foi:-12}, go:'j10_mensonge'},
+  {l:'Ne pas répondre.', s:'les dieux ne rendent pas de comptes', fx:{foi:-8}, go:'j10_silence'}
+]}),
+
+j10_verite: {qui:'p', t:[
+  'Déjà parti. D\'accord.',
+  'Tu sais, Ormund n\'a jamais dit ça. Ormund ne disait rien, jamais, et on remplissait les blancs avec de l\'espoir. Toi, tu dis « je ne pouvais pas ». C\'est la première fois qu\'un dieu me dit qu\'il a des limites.',
+  'Ça devrait me faire douter. Ça fait l\'inverse. Je sais à quoi je crois, maintenant. Pas à un dieu qui peut tout. À un dieu qui essaie.'
+], c:[{l:'Continuer.', go:'j10_fin'}]},
+
+j10_dur: {qui:'p', t:[
+  'Tu n\'as pas voulu.',
+  'Je vais rester ton prophète, {dieu}. Parce que j\'ai donné trop pour reculer. Mais je ne te regarderai plus de la même façon. Et je sais maintenant qu\'un jour, quand ce sera moi dans la charrette, tu feras peut-être le même calcul.',
+  'C\'est peut-être ça, un vrai dieu. Je préférais quand je ne le savais pas.'
+], c:[{l:'Continuer.', go:'j10_fin'}]},
+
+j10_mensonge: {qui:'p', t:[
+  'Fatigué. Moi.',
+  'Je l\'étais. C\'est vrai. Mais j\'ai été fatigué toute ma vie, et tu as guéri la fièvre rouge avec mes mains fatiguées. Ne me fais pas ça. Ne me mets pas ça sur le dos.',
+  'Je vais boire ce soir. Pas beaucoup. Juste assez pour ne pas penser que mon dieu ment comme les autres.'
+], c:[{l:'Continuer.', fx:{flag:'rechute'}, go:'j10_fin'}]},
+
+j10_silence: {qui:'p', t:[
+  'Rien. Comme la première nuit.',
+  'Tu sais ce que ça fait, le silence, quand on a déjà entendu ? C\'est pire que de ne jamais avoir entendu. Ormund se taisait et je m\'en foutais. Toi tu te tais et ça me tue.',
+  'Je vais continuer. Mais Barnabé m\'a trouvé sur le banc ce matin, et il a dit que j\'avais la tête de la première nuit. Il a raison.'
+], c:[{l:'Continuer.', go:'j10_fin'}]},
+
+j10_fin: {qui:'monde', t:[
+  'La foi d\'un prophète ne se mesure pas aux miracles qu\'il a vus. Elle se mesure à ce qu\'il fait quand il n\'y en a pas.'
+], c:[{l:'Jour 11', go:'j11_selune', fx:{jour:11}}]},
+
+/* ---------------- JOUR 11 — Sélune ---------------- */
+j11_selune: {qui:'p', t:[
+  'Une vieille est venue me voir. Ondine, la doyenne du port, celle qui jette les fleurs à Sélune depuis soixante ans. Elle a demandé à me parler seule.',
+  '« Docteur. Sélune ne m\'a jamais parlé. Mais elle a toujours été là, dans l\'eau, dans la pluie, dans le poisson qui revient. Elle ne guérit pas. Elle ne punit pas. Elle est. Vos gens disent au port qu\'elle n\'existe pas. »',
+  '« Je ne viens pas me battre. Je viens vous demander : est-ce que votre dieu a besoin que le mien meure ? »'
+], c:[
+  {l:'« Non. Dis-lui que {dieu} et Sélune peuvent partager le port. »', s:'la paix · moins de croyants, mais une alliée', fx:{foi:+5, flag:'selune_alliee'}, go:'j11_paix'},
+  {l:'« Oui. Un seul dieu par ville. Prends le port. »', s:'la conquête · +8 croyants, et une vieille en pleurs', fx:{croyants:+8, ombre:+1}, go:'j11_conquete'},
+  {l:'« Demande-lui si Sélune lui a déjà donné un signe. Un seul. »', s:'la question qui tue', fx:{croyants:+3}, go:'j11_question'}
+]},
+
+j11_paix: {qui:'p', t:[
+  'Je lui ai dit que tu n\'avais pas besoin de tuer qui que ce soit. Que la rivière pouvait rester à Sélune et les malades à {dieu}.',
+  'Elle a pleuré. Pas de tristesse. Elle a dit que personne, en soixante ans, ne lui avait parlé de Sélune comme si elle existait vraiment. Elle a dit qu\'elle jetterait une fleur pour toi, demain, avec les autres.',
+  'Le port ne sera jamais entièrement à toi. Mais il ne sera jamais contre toi non plus. Et quand le père Anselme viendra prêcher ta mort au port, c\'est Ondine qui lui fermera sa porte.'
+], c:[{l:'Continuer.', fx:{croyants:+2}, go:'j11_fin'}]},
+
+j11_conquete: {qui:'p', t:[
+  'Je lui ai dit la vérité telle que tu la vois : une ville, un dieu. Elle n\'a rien répondu. Elle est repartie vers le port avec son panier de fleurs.',
+  'Le lendemain, Barnabé a prêché sur les quais. Il a été bon. Trop bon. Le soir, il n\'y avait plus une fleur sur l\'eau. Ondine est restée chez elle.',
+  'On a pris le port. Je te le donne. Mais je ne vais pas te dire que j\'ai aimé ça.'
+], c:[{l:'Continuer.', fx:{foi:-5}, go:'j11_fin'}]},
+
+j11_question: {qui:'p', t:[
+  'Je lui ai demandé : « En soixante ans, est-ce que Sélune vous a répondu une seule fois ? »',
+  'Elle a réfléchi longtemps. Elle a dit : « Non. Mais je n\'ai jamais demandé. » Alors j\'ai dit : « Demandez-lui ce soir. Et demandez à {dieu} aussi. Et voyez qui répond. »',
+  'Elle est venue me voir ce matin. Elle n\'a rien dit. Elle m\'a tendu une fleur. Je crois que c\'était pour toi.'
+], c:[{l:'Continuer.', fx:{flag:'selune_alliee'}, go:'j11_fin'}]},
+
+j11_fin: {qui:'monde', t:[
+  'Le port a toujours été le quartier des gens qui attendent. Les marins, les veuves, les enfants qui regardent l\'eau. Ce qu\'ils attendent a peut-être changé de nom.'
+], c:[{l:'Jour 12', go:'j12_procession', fx:{jour:12}}]},
+
+/* ---------------- JOUR 12 — la procession ---------------- */
+j12_procession: ()=>({qui:'p', t:[
+  flag('disc_espion') ? 'Barnabé avait raison. La grande procession d\'Ormund, c\'est demain. Et le miracle est préparé : une statue qui pleure. Un tuyau dans la pierre, un moine derrière avec une outre d\'eau salée. Toute la ville est invitée.'
+                      : 'Le temple a affiché partout : grande procession d\'Ormund, demain. Un miracle est annoncé. La statue du Vieux Dieu pleurera pour les péchés de la ville. Toute la ville est invitée. Nous aussi, officiellement.',
+  'Le père Anselme veut reprendre la ville en un jour. Si la statue pleure devant deux mille personnes, la moitié des nôtres retournera à Ormund par peur.',
+  'Dis-moi quoi faire.'
+], c:[
+  {l:'« Vas-y. Et quand la statue pleurera, fais-la rire. »', s:'8 ferveur · l\'humiliation publique', fx:{ferveur:-8, flag:'statue_rit'}, go:'j12_rire'},
+  flag('disc_espion') ? {l:'« Dénonce le tuyau. Devant tout le monde. Avant qu\'elle pleure. »', s:'gratuit · la vérité suffit', fx:{foi:+5}, go:'j12_tuyau'} : {l:'« Vas-y, et soigne quelqu\'un dans la foule pendant qu\'ils regardent la statue. »', s:'4 ferveur · un vrai miracle contre un faux', fx:{ferveur:-4}, go:'j12_vrai'},
+  {l:'« N\'y va pas. Fais une fête au faubourg le même jour. »', s:'6 ferveur · la concurrence', fx:{ferveur:-6}, go:'j12_fete'},
+  {l:'« Vas-y, agenouille-toi avec eux, et laisse la statue pleurer. »', s:'l\'humilité', fx:{foi:+3}, go:'j12_genoux'}
+]}),
+
+j12_rire: {qui:'p', t:[
+  'Deux mille personnes sur la place. La statue d\'Ormund, trois mètres de pierre, et le père Anselme en robe d\'or. Les cloches. Les chants. Et puis les larmes : deux filets d\'eau sur les joues de pierre. La foule a hurlé.',
+  'Et j\'ai dit ton nom. Et la bouche de pierre s\'est ouverte. Et la statue a ri. Un rire énorme, de pierre, qui a fait trembler les vitres du temple.',
+  'Le père Anselme s\'est évanoui. Les moines ont fui. La foule, elle, a mis dix secondes à comprendre, puis elle a ri avec la statue. Deux mille personnes qui rient d\'Ormund. Il ne s\'en relèvera pas.'
+], c:[{l:'Continuer.', fx:{croyants:+20, flag:'ormund_fini'}, go:'j12_fin'}]},
+
+j12_tuyau: {qui:'p', t:[
+  'J\'ai attendu que les cloches sonnent. J\'ai monté les marches avant que le père Anselme ouvre la bouche. J\'ai dit : « Avant que vous pleuriez, mon père, laissez-moi vous montrer quelque chose. »',
+  'J\'ai fait le tour de la statue. J\'ai tiré le rideau. Le moine était là, l\'outre à la main, le tuyau dans la pierre. Deux mille personnes ont vu.',
+  'Je n\'ai pas eu besoin de toi. Juste d\'un rideau. Le père Anselme n\'a pas dit un mot. Il est rentré dans son temple et il a fermé la porte. On ne l\'a pas revu.'
+], c:[{l:'Continuer.', fx:{croyants:+15, flag:'ormund_fini'}, go:'j12_fin'}]},
+
+j12_vrai: {qui:'p', t:[
+  'La statue a pleuré. La foule a crié. Et pendant qu\'ils regardaient en l\'air, j\'ai trouvé dans la foule un aveugle de naissance, Victorin Picard, le fils du tanneur, et j\'ai dit ton nom en lui prenant la tête.',
+  'Il a crié plus fort que tous les autres. Parce qu\'il voyait. Pour la première fois. Il voyait la statue, le prêtre, le ciel, et il hurlait « c\'est quoi ça, c\'est quoi ça ».',
+  'Les gens autour ont compris avant le prêtre. Un faux miracle en l\'air, un vrai au milieu d\'eux. La procession s\'est finie en bagarre. On a gagné la bagarre.'
+], c:[{l:'Continuer.', fx:{croyants:+10}, go:'j12_fin'}]},
+
+j12_fete: {qui:'p', t:[
+  'On a fait la fête au faubourg. Marthe a fait du pain pour trois cents. Firmin a sorti un tonneau. Barnabé a chanté, et il chante mal, et c\'était parfait.',
+  'La moitié de la ville est venue à la procession. L\'autre moitié est venue chez nous, parce qu\'il y avait du pain et pas de sermon. La statue a pleuré devant une place à moitié vide.',
+  'Le père Anselme a dit que c\'était un sacrilège. Il avait la voix d\'un homme qui a perdu.'
+], c:[{l:'Continuer.', fx:{croyants:+8, foi:+5}, go:'j12_fin'}]},
+
+j12_genoux: {qui:'p', t:[
+  'Je me suis mis à genoux avec eux. Au premier rang. Le père Anselme m\'a vu. Il n\'a pas compris.',
+  'La statue a pleuré. Les gens ont prié. Et moi, à genoux devant Ormund, j\'ai dit ton nom tout bas. Les gens autour de moi l\'ont entendu. Ils ont vu le prophète de {dieu} à genoux sans peur devant le vieux dieu.',
+  'Je crois que c\'est ça qui a fait le plus de mal au prêtre. Pas un miracle. Un homme qui n\'avait plus besoin de le combattre.'
+], c:[{l:'Continuer.', fx:{croyants:+5, foi:+5}, go:'j12_fin'}]},
+
+j12_fin: {qui:'monde', t:[
+  'Le lendemain, les cloches du temple d\'Ormund n\'ont pas sonné. Pour la première fois en mille ans.'
+], c:[{l:'Jour 13', go:'j13_bete2', fx:{jour:13}}]},
+
+/* ---------------- JOUR 13 — le retour de la bête ---------------- */
+j13_bete2: ()=>({qui:'p', t:[
+  'Elle est revenue. La bête. Pas sur la colline : en ville. Dans le faubourg. Chez nous.',
+  'Elle a tué deux tanneurs cette nuit et elle a emporté Barnabé.',
+  'Pas tué. Emporté. On a suivi les traces jusqu\'au vieux moulin, au bord de la rivière. Il est vivant, on l\'entend. Elle attend. Elle attend quoi, {dieu} ? Elle attend qui ?'
+], c:[
+  {l:'« Elle m\'attend. Vas-y avec tous les croyants. Je serai avec vous. »', s:'10 ferveur · la guerre sainte', fx:{ferveur:-10, flag:'bete_vaincue'}, go:'j13_tous'},
+  {l:'« Vas-y seul. Comme la première fois. »', s:'il peut mourir pour de bon', go:'j13_seul'},
+  {l:'« Offre-lui quelque chose. Un dieu peut parler à une bête. »', s:'la voie de l\'ombre · tu sais ce qu\'elle veut', fx:{ombre:+1}, go:'j13_pacte'},
+  {l:'« Laisse Barnabé. Un disciple de moins, c\'est tous les autres sauvés. »', s:'le calcul', fx:{foi:-15, mort:'Barnabé', ombre:+1}, go:'j13_laisse'}
+]}),
+
+j13_tous: ()=>({qui:'p', t:[
+  `On y est allés à ${Math.min(S.croyants, 80)}. Avec des torches, des fourches, des couteaux de tanneur. Marthe avec son rouleau à pâtisserie, je te jure. Firmin devant.`,
+  'La bête est sortie du moulin. Grande comme une maison. Les gens ont reculé. Et puis j\'ai dit ton nom, et tous l\'ont répété, et la lumière des torches est devenue blanche.',
+  'Elle a brûlé. Pas de flammes. Juste de la lumière, et elle a hurlé, et elle a fondu dans la rivière. Barnabé était dans le moulin, une jambe cassée, vivant. Il a dit : « J\'ai entendu. Il nous a entendus. » Toute la ville a vu la lumière.'
+], c:[{l:'Continuer.', fx:{croyants:+15, foi:+10}, go:'j13_fin'}]}),
+
+j13_seul: ()=>{
+  const sobre = flag('sobre'), fort = S.foi>=70;
+  if(fort) return {qui:'p', t:[
+    'J\'y suis allé seul. Sans fusil cette fois. Avec ta croix et mon stéthoscope, comme un con.',
+    'Elle est sortie. Je l\'ai regardée dans les yeux, et je n\'ai pas eu peur. C\'est ça qui l\'a arrêtée. Elle a reniflé. Elle a reculé. Elle a lâché Barnabé dans la boue et elle est partie vers les collines, lentement, comme un vieux chien.',
+    'Je ne sais pas ce que j\'ai fait. Je crois que je n\'ai rien fait. Je crois que j\'étais simplement plein de toi, et qu\'elle l\'a senti.'
+  ], c:[{l:'Continuer.', fx:{croyants:+6, foi:+10, flag:'bete_partie'}, go:'j13_fin'}]};
+  return {qui:'p', t:[
+    'J\'y suis allé seul. J\'avais peur. J\'avais tellement peur que je tremblais, et elle l\'a senti.',
+    'Elle m\'a ouvert le ventre. J\'ai eu le temps de dire ton nom, de jeter ma croix à Barnabé, et de le voir ramper dehors pendant qu\'elle était sur moi. Il est vivant. Moi… moi, c\'est autre chose.',
+    'Barnabé est ton prophète, maintenant. Il est jeune. Il croit. Prends soin de lui mieux que de moi. Adieu, {dieu}. C\'était bien.'
+  ], c:[{l:'Continuer.', fx:{mort:'Aurèle Vauclair', flag:'aurele_mort', foi:-20, croyants:+4}, go:'j13_fin'}]};
+},
+
+j13_pacte: {qui:'p', t:[
+  'Je suis allé au moulin, seul, les mains vides. J\'ai dit ton nom. Et tu as parlé. Pas à moi. À elle.',
+  'Je n\'ai pas compris les mots. Mais j\'ai compris le marché : la bête est à toi, maintenant. Elle ne touchera plus aux tiens. Elle touchera aux autres. Elle a lâché Barnabé et elle m\'a regardé comme on regarde un collègue.',
+  'La ville sera à toi vite, {dieu}. Très vite. Les gens ont compris qu\'il valait mieux être du bon côté de la bête. Mais ce n\'est plus de la foi. C\'est de la peur avec un nom.'
+], c:[{l:'Continuer.', fx:{croyants:+18, foi:-10, flag:'bete_pacte'}, go:'j13_fin'}]},
+
+j13_laisse: {qui:'p', t:[
+  'On l\'a entendu toute la nuit. Il a appelé ton nom jusqu\'à l\'aube. Puis il a appelé le mien. Puis plus rien.',
+  'Au matin, la bête était partie. Elle avait ce qu\'elle voulait. Les tanneurs sont saufs. Le faubourg est sauf. Tu as fait le calcul, et le calcul était juste.',
+  'Je ne t\'en parlerai plus jamais. Mais je ne dirai plus jamais ton nom en souriant.'
+], c:[{l:'Continuer.', go:'j13_fin'}]},
+
+j13_fin: {qui:'monde', t:[
+  'Les bêtes ne viennent pas de nulle part. Celle-là est venue parce qu\'un dieu nouveau grandissait, et que quelque chose, quelque part, n\'aimait pas ça.',
+  'Il y a d\'autres dieux que les deux de cette ville. Tu viens de rencontrer le premier.'
+], c:[{l:'Jour 14', go:'j14_temple', fx:{jour:14}}]},
+
+/* ---------------- JOUR 14 — le temple ---------------- */
+j14_temple: ()=>{
+  const mortA = flag('aurele_mort');
+  const qui = mortA ? 'Barnabé' : null;
+  return {qui:'p', nomQui:qui, t:[
+    mortA ? 'C\'est Barnabé. Je… je reprends là où Aurèle s\'est arrêté. Il m\'a laissé sa croix et une liste de malades. Je fais ce que je peux. Et ce matin, le conseil de la ville est venu me voir.'
+          : 'Le conseil de la ville est venu à l\'hôpital. Le gouverneur, les marchands, et même deux vieux moines d\'Ormund qui ne savent plus à qui prier.',
+    `« ${S.croyants} personnes suivent ${S.nom}. C\'est plus qu\'Ormund. Un dieu de cette taille doit avoir un lieu. Nous offrons de le bâtir. » Un temple, {dieu}. Pour toi.`,
+    'Ils m\'ont demandé où, et comment. Et je ne sais pas ce que tu veux. Je sais ce qu\'Ormund voulait : du marbre, de l\'or, et des marches pour qu\'on se sente petit.'
+  ], c:[
+    {l:'« Sur la place, à la place de celui d\'Ormund. En marbre. »', s:'la puissance · 15 ferveur', fx:{ferveur:-15, croyants:+10, flag:'temple_marbre'}, go:'j14_marbre'},
+    {l:'« L\'hôpital. Le temple de {dieu}, c\'est l\'hôpital. Agrandissez-le. »', s:'le soin · 8 ferveur', fx:{ferveur:-8, croyants:+6, foi:+10, flag:'temple_hopital'}, go:'j14_hopital'},
+    {l:'« Pas de temple. Un banc. Derrière l\'hôpital. Celui de la première nuit. »', s:'l\'humilité · gratuit', fx:{foi:+15, flag:'temple_banc'}, go:'j14_banc'},
+    {l:'« Un temple noir. Au bord de la rivière. Là où la bête est entrée dans l\'eau. »', s:'l\'ombre · 12 ferveur', fx:{ferveur:-12, croyants:+8, ombre:+2, flag:'temple_noir'}, go:'j14_noir'}
+  ]};
+},
+
+j14_marbre: {qui:'p', t:[
+  'Ils ont abattu le temple d\'Ormund en une semaine. Les moines ont regardé, puis ils ont aidé, parce qu\'il fallait bien manger. La statue qui pleurait est partie en morceaux dans la rivière.',
+  'Le tien monte. Blanc. Haut. Des marches, parce que les marchands ont insisté. Je monte dessus chaque matin et je me sens petit, moi aussi.',
+  'Tu es devenu un grand dieu, {dieu}. Comme Ormund. J\'espère que tu te souviens du banc.'
+], c:[{l:'Continuer.', go:'j15_fin'}]},
+
+j14_hopital: {qui:'p', t:[
+  'Cent lits. Des fenêtres qui ferment. Une salle pour les enfants, une pour les contagieux. Et au milieu, pas d\'autel : une table d\'opération.',
+  'Les gens viennent prier ici. Entre les lits. Ils disent ton nom en tenant la main d\'un malade. C\'est le seul temple au monde où on prie en travaillant.',
+  'Le père Anselme est venu, un soir, sans sa robe. Il a demandé s\'il pouvait aider. Je lui ai donné un seau. Il a dit merci.'
+], c:[{l:'Continuer.', fx:{croyants:+5}, go:'j15_fin'}]},
+
+j14_banc: {qui:'p', t:[
+  'Je leur ai dit : le banc. Ils ont cru que je plaisantais. Le gouverneur a dit que ce n\'était pas sérieux, qu\'un dieu sans temple n\'était pas un dieu.',
+  'Alors je les ai emmenés derrière l\'hôpital. Il y avait quarante personnes assises par terre autour du banc, à trois heures de l\'après-midi, qui disaient ton nom en regardant le ciel. Sans que personne le leur ait demandé.',
+  'Le gouverneur s\'est tu. On n\'a pas de temple, {dieu}. On a quelque chose que les temples n\'ont jamais eu.'
+], c:[{l:'Continuer.', fx:{croyants:+8}, go:'j15_fin'}]},
+
+j14_noir: {qui:'p', t:[
+  'Pierre noire, sans fenêtres, au bord de l\'eau. Là où la bête est entrée. Les gens n\'y entrent pas. Ils déposent des choses devant la porte, la nuit, et ils repartent vite.',
+  'Je suis le seul à y entrer. Il y fait froid. Je t\'y sens plus fort qu\'ailleurs, et différent. Plus vieux. Je ne sais pas ce que tu deviens, {dieu}.',
+  'La ville est à toi. Toute. Mais quand je passe dans la rue, les enfants se cachent.'
+], c:[{l:'Continuer.', go:'j15_fin'}]},
+
+/* ---------------- JOUR 15 — la fin de la première histoire ---------------- */
+j15_fin: ()=>({qui:'monde', t:[
+  'Quinze jours. Il y a quinze jours, tu n\'avais pas de nom, et un médecin ivre te parlait sur un banc.',
+  `Aujourd\'hui, ${S.croyants} personnes disent ton nom chaque matin. Le temple d\'Ormund ${flag('ormund_fini')?'est fermé':'tient encore, à peine'}. ${flag('selune_alliee')?'Sélune jette des fleurs pour toi.':'Sélune se tait.'}`,
+  S.mort.length ? `Et ${S.mort.length===1?'une personne est morte':S.mort.length+' morts jalonnent'} sur le chemin : ${S.mort.join(', ')}.` : 'Et personne n\'est mort sur le chemin. Personne.'
+], c:[{l:'Voir ce que tu es devenu.', go:'fin'}]}),
+
+fin: ()=>{
+  const o=S.ombre, f=S.foi, c=S.croyants;
+  let titre, texte;
+  if(flag('aurele_mort')) { titre='Le dieu orphelin'; texte='Ton prophète est mort pour toi. Barnabé porte sa croix, et la ville porte ton nom. Mais chaque fois qu\'on te prie, c\'est le banc vide qu\'on regarde. Tu as appris ce que coûte un homme. Ne l\'oublie pas pour le suivant.'; }
+  else if(o>=5) { titre='Le dieu de la peur'; texte='La ville est à toi. Entière. Les enfants se cachent quand passe ton prophète, et personne ne prononce ton nom en souriant. Tu as gagné vite, et tu as gagné tout. Un jour, quelqu\'un d\'autre arrivera, sur un banc, et parlera à ceux que tu as fait trembler. C\'est ainsi que les dieux de la peur finissent : par un nouveau dieu.'; }
+  else if(f>=85 && o<=1) { titre='Le dieu du banc'; texte='Tu n\'as pas voulu de marbre. Tu as voulu un homme, et il t\'a cru. La ville ne t\'a pas suivi parce que tu étais fort, mais parce que tu étais là. On dit, dans les quartiers, qu\'on peut te parler. C\'est la chose la plus rare qu\'on puisse dire d\'un dieu.'; }
+  else if(c>=60) { titre='Le dieu nouveau'; texte='Tu as pris la ville en quinze jours, par les miracles et par les choix. Tu as des croyants, un lieu, un prophète fatigué et fidèle. Tu es devenu ce qu\'Ormund était il y a mille ans : un dieu qui compte. Reste à savoir ce que tu feras quand on commencera à te décevoir.'; }
+  else { titre='Le dieu discret'; texte='Tu n\'as pas pris la ville. Tu as pris quelques maisons, un hôpital, et le cœur d\'un homme qui ne croyait plus en rien. C\'est peu. C\'est exactement ce que les grands dieux ont eu, au début. La suite est à écrire.'; }
+  return {fin:true, titre, texte};
+}
+};
+
+/* ============================================================
+   LE MOTEUR
+   ============================================================ */
+function noeud(){ let n=N[S.noeud]; if(typeof n==='function') n=n(); return n; }
+function appliquer(fx, ancre){
+  if(!fx) return;
+  const d={};
+  if(fx.ferveurTout){ d.ferveur=-S.ferveur; S.ferveur=0; }
+  if(fx.ferveur){ d.ferveur=fx.ferveur; S.ferveur=Math.max(0,S.ferveur+fx.ferveur); }
+  if(fx.croyants){ d.croyants=fx.croyants; S.croyants=Math.max(1,S.croyants+fx.croyants); }
+  if(fx.foi){ S.foi=Math.max(0,Math.min(100,S.foi+fx.foi)); }
+  if(fx.ombre){ S.ombre+=fx.ombre; }
+  if(fx.flag) set(fx.flag); if(fx.flag2) set(fx.flag2);
+  if(fx.mort) S.mort.push(fx.mort);
+  if(fx.jour){ S.jour=fx.jour; // revenu quotidien des croyants
+    const dogme = flag('dogme_sang')?4:flag('dogme_repas')?2:flag('dogme_priere')?1:0;
+    const gain = Math.round(S.croyants*dogme*0.25) + (flag('sobre')?1:0);
+    if(gain){ S.ferveur+=gain; d.ferveur=(d.ferveur||0)+gain; }
   }
-  if(n==='nouvelles'){
-    const ch=[]; const qs=QUARTIERS.map((q,qi)=>({qi,n:famsDu(qi).reduce((a,f)=>a+besoinsDe(f).length,0)})).sort((a,b)=>b.n-a.n);
-    let t='';
-    const pire=qs[0]; if(pire.n) t+=`Le quartier ${deQ(pire.qi)} va le plus mal : ${pire.n} personnes souffrent. `;
-    famsEnDiff.slice(0,4).forEach(f=>{ const b=besoinsDe(f); ch.push({l:`Les ${f.nom} (${nomQ(f.quartier)})`, s:b.slice(0,2).map(h=>BESOINS[h.besoin]).join(', ')+(b.length>2?'…':''), go:'famille', ctx:{f:f.id}}); });
-    if(douteursConnus.length){ const d=pick(douteursConnus); t+=`${douteursConnus.length} personne${douteursConnus.length>1?'s':''} qui connaissent ton nom doutent de leur dieu. `; ch.push({l:`Va convaincre ${nomH(d)}`, s:`${nomQ(fam(d).quartier)} · ${nomDieu(d.dieu)} ${d.foi}`, do:()=>convaincre(d)}); }
-    if(croyants().length>=8 && p.foi>=70 && disciples().length<QUARTIERS.length){ ch.push({l:'Nous sommes assez nombreux pour un disciple.', s:'il tiendra un quartier pour toi', go:'disciple'}); }
-    if(!t && !ch.length) t='Rien à signaler. Les gens vivent, et personne ne meurt. C\'est déjà beaucoup.';
-    ch.push(retour());
-    return {t:t||'Voilà ce que je sais.', c:ch};
-  }
-  if(n==='quartiers'){
-    return {t:'Où dois-je aller ?', c:[...QUARTIERS.map((q,qi)=>{ const j=jaugesQ(qi), hs=habsDu(qi); const fid=hs.filter(h=>h.dieu==='joueur').length; const pire=Math.min(j.nourriture,j.sante,j.securite); return {l:Maj(q), s:`${famsDu(qi).length} familles · ${fid} fidèles${pire<40?' · en difficulté':''}${disciples().some(d=>fam(d).quartier===qi)?' · ✧':''}`, go:'quartier', ctx:{q:qi}}; }), retour()]};
-  }
-  if(n==='quartier'){
-    const qi=c.q, fs=famsDu(qi), j=jaugesQ(qi), q=S.quartiers[qi];
-    let t=`${Maj(nomQ(qi))}. ${j.nourriture<35?'On y a faim. ':''}${j.sante<50?'La fièvre y traîne. ':''}${q.bete>0?'Une bête rôde. ':''}${q.conflit?`Les ${S.familles[q.conflit[0]].nom} et les ${S.familles[q.conflit[1]].nom} se querellent. `:''}${habsDu(qi).filter(h=>h.dieu==='joueur').length} des leurs te suivent.`;
-    const ch=fs.map(f=>{ const b=besoinsDe(f), m=membres(f); return {l:`Les ${f.nom}`, s:`${m.length} pers. · ${m.filter(h=>h.dieu==='joueur').length} fidèles${b.length?' · '+b.length+' en difficulté':''}`, go:'famille', ctx:{f:f.id}}; });
-    ch.push({l:'Prêche sur la place.', s:'gratuit, selon ta foi', do:()=>precher(qi)});
-    ch.push({l:'Un miracle sur le quartier.', s:'coûte de la ferveur', go:'miracles', ctx:{q:qi}});
-    ch.push(retour('quartiers'));
-    return {t, c:ch};
-  }
-  if(n==='famille'){
-    const f=S.familles[c.f], m=membres(f), j=jaugesF(f), b=besoinsDe(f);
-    const fid=m.filter(h=>h.dieu==='joueur'), dout=m.filter(h=>h.dieu!=='joueur'&&h.foi<30);
-    let t=`Les ${f.nom}, ${nomQ(f.quartier)}. ${m.length} personnes, ${fid.length} te suivent${dout.length?`, ${dout.length} doutent de leur dieu`:''}. `;
-    t+= j.nourriture<35?'Leur grenier est vide. ':j.nourriture>80?'Ils mangent à leur faim. ':''; t+= j.sante<50?'La maladie est dans la maison. ':''; t+= j.richesse<20?'Ils n\'ont plus un sou. ':''; t+= j.securite<60?'Ils ont peur. ':'';
-    if(b.length) t+=`En ce moment : ${b.slice(0,4).map(h=>`${h.prenom} ${BESOINS[h.besoin]}`).join(', ')}${b.length>4?'…':''}.`;
-    const ch=[{l:'Va les voir.', s:'gratuit · ils te découvrent, les douteurs t\'écoutent', do:()=>visiterFamille(f)}];
-    const besoinsIds=[...new Set(b.map(h=>h.besoin))];
-    AIDES.filter(a=>besoinsIds.includes(a.besoin)||(a.besoin==='malade'&&besoinsIds.includes('blesse'))).forEach(a=>ch.push({l:a.nom, s:`${a.cout} ferveur · ${a.desc}`, lock:S.ferveur<a.cout, do:()=>aiderFamille(f,a)}));
-    if(b.length) ch.push({l:'Console quelqu\'un.', s:'gratuit, un geste humain', go:'personnes', ctx:{f:f.id, mode:'consoler'}});
-    if(dout.length) ch.push({l:'Convaincs un douteur.', s:'gratuit, selon ta foi', go:'personnes', ctx:{f:f.id, mode:'convaincre'}});
-    if(fid.length) ch.push({l:'Demande un sacrifice à un fidèle.', s:'rapporte de la ferveur', go:'personnes', ctx:{f:f.id, mode:'sacrifier'}});
-    ch.push({l:'Parle-moi d\'eux.', s:'leurs jauges', go:'personnes', ctx:{f:f.id, mode:'voir'}});
-    ch.push(retour('quartier', '← Le quartier'));
-    S.ctx.q=f.quartier;
-    return {t, c:ch};
-  }
-  if(n==='personnes'){
-    const f=S.familles[c.f], m=membres(f), mode=c.mode;
-    let liste=m; if(mode==='consoler') liste=m.filter(h=>h.besoin); if(mode==='convaincre') liste=m.filter(h=>h.dieu!=='joueur'&&h.foi<30); if(mode==='sacrifier') liste=m.filter(h=>h.dieu==='joueur');
-    const t = mode==='voir' ? `Les ${f.nom} : ${Math.round(f.vivres)} vivres, ${Math.round(f.argent)} pièces, ${m.filter(h=>PRODUCTEURS.includes(h.metier)).length} qui nourrissent la maison.` : mode==='consoler'?'Qui ?':mode==='convaincre'?'Lequel ?':'À qui ?';
-    const ch=liste.map(h=>({l:`${EMOJI[h.metier]} ${h.prenom}${h.prophete?' ✦':h.disciple?' ✧':''}`, s:`${h.metier} · ${nomDieu(h.dieu)} ${h.foi} · santé ${h.sante}${h.besoin?' · '+BESOINS[h.besoin]:''}`,
-      do: mode==='consoler'?()=>consoler(h): mode==='convaincre'?()=>convaincre(h): null, go: mode==='sacrifier'?'sacrifice':(mode==='voir'?'personnes':null), ctx:{qui:h.id, f:f.id, mode}, sec: mode==='voir', lock: mode==='voir'}));
-    ch.push(retour('famille','← La famille'));
-    return {t, c:ch};
-  }
-  if(n==='sacrifice'){
-    const h=S.habs.find(x=>x.id===c.qui)||p; const estP=h.prophete;
-    const t= estP ? (p.foi<30?'Je t\'écoute. Mais ne me demande pas l\'impossible.':p.foi<60?'Dis-moi. Je ferai ce que je peux.':'Tout ce que tu voudras.') : `Que doit faire ${h.prenom} ?`;
-    const ch=SACRIFICES.map(sa=>({l:sa.nom, s:`foi ${sa.poids} · +${sa.ferveur} ferveur · ${sa.desc}`, lock:h.foi+10<sa.poids || (sa.id==='bete'&&S.quartiers[fam(h).quartier].bete<=0), do:()=>demanderSacrifice(h,sa)}));
-    ch.push(retour(estP?'racine':'famille'));
-    return {t, c:ch};
-  }
-  if(n==='religion'){
-    const ch=[{l:'Les dogmes.', s:`${S.dogmes.length}/${maxDogmes()} que tu peux faire respecter`, go:'dogmes'}];
-    if(croyants().length>=8 && p.foi>=70 && disciples().length<QUARTIERS.length) ch.push({l:'Nomme un disciple.', s:'un fidèle qui tiendra un quartier', go:'disciple'});
-    else ch.push({l:'Un disciple ?', s: croyants().length<8?'il faut 8 croyants':p.foi<70?'il faut que ta foi atteigne 70':'un par quartier, c\'est fait', lock:true});
-    ch.push({l:'Prêche sur ta place.', s:'gratuit, selon ta foi', do:()=>precher(fam(p).quartier)});
-    ch.push(retour());
-    const d=disciples();
-    return {t:`${croyants().length} te suivent. ${S.dogmes.length?'Dogmes : '+S.dogmes.map(id=>DOGMES.find(x=>x.id===id).nom.toLowerCase()).join(', ')+'. ':'Aucun dogme encore. '}${d.length?'Disciples : '+d.map(x=>`${x.prenom} (${nomQ(fam(x).quartier)})`).join(', ')+'.':''}`, c:ch};
-  }
-  if(n==='dogmes'){
-    return {t:'Lesquels ?', c:[...DOGMES.map(d=>{ const on=S.dogmes.includes(d.id); const nb=croyants().filter(h=>suitDogme(h,d)).length; return {l:`${on?'✓ ':''}${d.nom}`, s:`${d.desc} · foi ${d.poids} · ${nb}/${croyants().length}`, do:()=>toggleDogme(d)}; }), retour('religion')]};
-  }
-  if(n==='disciple'){
-    const cands=croyants().filter(h=>!h.prophete&&!h.disciple&&h.foi>=60).sort((a,b)=>b.foi-a.foi).slice(0,6);
-    const pris=disciples().map(d=>fam(d).quartier);
-    return {t:'Qui ? Il parlera en mon nom dans son quartier.', c:[...cands.map(h=>({l:`${nomH(h)}`, s:`${nomQ(fam(h).quartier)} · foi ${h.foi}${pris.includes(fam(h).quartier)?' · ce quartier a déjà un disciple':''}`, lock:pris.includes(fam(h).quartier), go:'religion', do:()=>{ h.disciple=true; log(`${nomH(h)} devient disciple.`, true); return `${h.prenom} a reçu ma parole, et tiendra ${nomQ(fam(h).quartier)} pour toi.`; }})), retour('religion')]};
-  }
-  if(n==='miracles'){
-    const qi=c.q;
-    const ch=[];
-    if(qi===undefined) QUARTIERS.forEach((q,i)=>ch.push({l:Maj(q), s:'un miracle sur ce quartier', go:'miracles', ctx:{q:i}}));
-    else MIRACLES.filter(m=>m.cout.quartier).forEach(m=>ch.push({l:m.nom, s:`${m.cout.quartier} ferveur · ${m.desc}`, lock:S.ferveur<m.cout.quartier, do:()=>miracle(m,'quartier',qi)}));
-    MIRACLES.forEach(m=>ch.push({l:`${m.nom} — toute la ville`, s:`${m.cout.ville} ferveur · ${m.desc}`, lock:S.ferveur<m.cout.ville, do:()=>miracle(m,'ville')}));
-    ch.push(retour(qi!==undefined?'quartier':'racine'));
-    return {t: qi!==undefined?`Un miracle ${deQ(qi)} ? Ou sur toute la ville ?`:'Sur quel quartier ? Ou sur toute la ville ?', c:ch};
-  }
-  if(n==='toi'){
-    const f=fam(p), j=jaugesF(f);
-    let t=`Je suis ${nomH(p)}, ${p.metier}, ${nomQ(f.quartier)}. Ma foi en toi : ${p.foi<30?'elle vacille':p.foi<60?'elle tient':p.foi<85?'elle est solide':'je mourrais pour toi'}. `;
-    t+= p.besoin?`Je suis ${BESOINS[p.besoin]}. `:''; t+= S.fatigue>8?'Je suis épuisé, laisse-moi souffler. ':''; t+= j.nourriture<35?'Ma famille a faim. ':''; t+= `Mes proches : ${membres(f).filter(h=>h.dieu==='joueur').length-1} sur ${membres(f).length-1} te suivent.`;
-    const ch=[];
-    if(p.besoin){ const a=AIDES.find(a=>a.besoin===p.besoin||(a.besoin==='malade'&&p.besoin==='blesse')); if(a) ch.push({l:'Aide-le.', s:`${a.cout} ferveur · ${a.desc}`, lock:S.ferveur<a.cout, do:()=>{ const r=aiderFamille(f,a); if(r.startsWith('Pas')) return r; p.foi=clamp(p.foi+10,0,100); return 'Merci. Je n\'oublierai pas.'; }}); ch.push({l:'Tiens bon.', s:'sa foi baisse', do:()=>{ p.foi=clamp(p.foi-6,0,100); return 'Je tiendrai. Je tiens toujours.'; }}); }
-    ch.push({l:'Va voir ta famille.', s:'gratuit', do:()=>visiterFamille(f)});
-    ch.push({l:'Que penses-tu de moi ?', s:'', do:()=> S.caractere<-1?'Tu es sombre, et j\'ai peur de toi. Mais la peur aussi fait prier.':croyants().length>20?'Tu es devenu un vrai dieu. Je ne suis plus seul à porter ton nom.':'Tu es nouveau. Les vieux dieux ont des temples, toi tu n\'as que moi. Ça me va.'});
-    ch.push(retour());
-    return {t, c:ch};
-  }
-  return {t:'…', c:[retour()]};
+  return d;
 }
 function choisir(i){
-  const nd=noeud(); const ch=nd.c[i]; if(!ch||ch.lock) return;
-  if(ch.sec && !ch.do && ch.go){ S.node=ch.go; S.ctx=Object.assign({},S.ctx,ch.ctx||{}); save(); render(); return; }
-  dire('toi', ch.l);
-  if(ch.ctx) S.ctx=Object.assign({},S.ctx,ch.ctx);
-  if(ch.do){ const r=ch.do(); if(r) dire('p', r); }
-  if(ch.go) S.node=ch.go;
-  recalculerBesoins(); save(); render();
+  const n=noeud(); const ch=n.c[i]; if(!ch) return;
+  S.histo.push(S.noeud);
+  const d=appliquer(ch.fx);
+  S.noeud=ch.go;
+  save(); render(d);
 }
+function recommencer(){ localStorage.removeItem(SAVE_KEY); S=null; render(); }
 
 /* ---------- rendu ---------- */
 const app=document.getElementById('app');
-function render(){
+function render(delta){
   if(!S) return renderSetup();
-  const p=prophete();
+  const n=noeud();
+  if(n.fin) return renderFin(n);
+  const qui = n.qui==='monde' ? '' : (n.nomQui || (flag('aurele_mort') ? 'Barnabé' : P.nom));
+  const portrait = flag('aurele_mort') ? `<div class="vide">Barnabé, qui porte la croix d'Aurèle</div>` : `<img src="prophete.png" alt="" onerror="this.outerHTML='<div class=vide>prophete.png manquant</div>'">`;
   app.innerHTML=`
   <header>
-    <h1><span>${S.dieu.nom}</span><small>${quand()} · ${saison().e} · v${VERSION}</small></h1>
-    <div class="stats">
-      <div class="stat gold"><b>${S.ferveur}</b>ferveur</div>
-      <div class="stat"><b>${croyants().length}</b>croyants</div>
-      <div class="stat"><b>${S.habs.length}</b>habitants</div>
-      <div class="stat pro"><b>${p?p.foi:'—'}</b>foi du prophète</div>
+    <div class="nom">${S.nom}<small>Jour ${S.jour} · v${VERSION}</small></div>
+    <div class="compteurs">
+      <div class="cpt gold" id="c-ferveur"><b>${S.ferveur}</b><small>ferveur</small></div>
+      <div class="cpt rose" id="c-croyants"><b>${S.croyants}</b><small>croyants</small></div>
     </div>
   </header>
-  <main>
-    <div class="tab ${tab==='prophete'?'on':''}" id="conv">${renderConv()}</div>
-    <div class="tab ${tab==='ville'?'on':''}">${renderVille()}</div>
-    <div class="tab ${tab==='chronique'?'on':''}">${renderChronique()}</div>
-  </main>
-  <nav>
-    <button class="${tab==='prophete'?'on':''}" onclick="go('prophete')"><span>✦</span>Prophète</button>
-    <button class="${tab==='ville'?'on':''}" onclick="go('ville')"><span>🏘️</span>Ville</button>
-    <button class="${tab==='chronique'?'on':''}" onclick="go('chronique')"><span>📖</span>Chronique</button>
-  </nav>`;
-  if(tab==='prophete') window.scrollTo(0, document.body.scrollHeight);
-}
-function go(t){tab=t;render();if(t!=='prophete')window.scrollTo(0,0)}
-function renderConv(){
-  const p=prophete(); const nd=noeud();
-  let s=S.msgs.slice(-14).map(m=>`<div class="msg ${m.de} ${m.imp?'imp':''}">${m.de==='p'?`<small class="q">${p?p.prenom:'Le prophète'} · ${m.q}</small>`:''}<div class="b">${m.t}</div></div>`).join('');
-  if(!p) return s+`<div class="msg monde"><div class="b">Tu n'as plus de prophète. Attends qu'un déçu se souvienne de toi.</div></div>`;
-  s+=`<div class="msg p imp"><small class="q">${p.prenom} · ${quand()}</small><div class="b">${nd.t}</div></div>`;
-  s+=`<div class="choix">${nd.c.map((c,i)=>`<button class="${c.sec?'sec':''} ${c.lock?'lock':''}" ${c.lock?'disabled':''} onclick="choisir(${i})"><span>${c.l}</span>${c.s?`<small>${c.s}</small>`:''}</button>`).join('')}</div>`;
-  const prochain = 10 - Math.floor(((Date.now()-S.derniereMaj)%TICK_MS)/60000);
-  s+=`<div class="msg monde"><div class="b">Le monde avance dans ${prochain} min.</div></div>`;
-  return s;
-}
-function barre(nom,val,aide){const cls=val<30?'bad':val<60?'warn':'';return `<div class="gauge"><div class="lbl"><span>${nom}</span><span>${val}%</span></div><div class="bar"><i class="${cls}" style="width:${val}%"></i></div>${aide?`<small style="color:var(--quiet);font-size:12px">${aide}</small>`:''}</div>`}
-function mini(j){ return `<div class="mini">${['nourriture','securite','sante','richesse'].map(k=>`<i><b class="${j[k]<30?'bad':j[k]<60?'warn':''}" style="width:${j[k]}%"></b></i>`).join('')}</div>`; }
-function renderVille(){
-  if(vue.f!==null){
-    const f=S.familles[vue.f], j=jaugesF(f), m=membres(f);
-    let s=`<button class="retour" onclick="vue.f=null;render()">← ${Maj(nomQ(f.quartier))}</button><h2>Les ${f.nom}</h2>
-    ${barre('Nourriture',j.nourriture,`${Math.round(f.vivres)} vivres · ${Math.round(prodF(f))} récoltés par jour, ${m.length} mangent`)}${barre('Sécurité',j.securite)}${barre('Santé',j.sante)}${barre('Richesse',j.richesse,`${Math.round(f.argent)} pièces`)}<h2>Les membres</h2>`;
-    m.sort((a,b)=>(b.dieu==='joueur')-(a.dieu==='joueur')).forEach(h=>{ s+=`<div class="row"><span>${EMOJI[h.metier]} ${h.prenom}${h.prophete?' ✦':h.disciple?' ✧':''}<small>${h.metier} · santé ${h.sante}${h.besoin?' · '+BESOINS[h.besoin]:''}${h.connait?'':' · ne te connaît pas'}</small></span><span class="foi ${h.dieu==='joueur'?'me':h.foi<30?'doubt':''}">${nomDieu(h.dieu)} ${h.foi}</span></div>`; });
-    return s;
-  }
-  if(vue.q!==null){
-    const qi=vue.q, q=S.quartiers[qi], j=jaugesQ(qi);
-    let s=`<button class="retour" onclick="vue.q=null;render()">← La ville</button><h2>${nomQ(qi)}</h2>${barre('Nourriture',j.nourriture)}${barre('Sécurité',j.securite,q.bete>0?'Une bête rôde.':q.conflit?'Deux familles se querellent.':'')}${barre('Santé',j.sante)}${barre('Richesse',j.richesse)}<h2>Les familles</h2>`;
-    famsDu(qi).forEach(f=>{ const m=membres(f), jf=jaugesF(f), b=besoinsDe(f); s+=`<div class="carte" onclick="vue.f=${f.id};render()"><h3>Les ${f.nom}<small>${m.filter(h=>h.dieu==='joueur').length}/${m.length} te suivent${b.length?' · '+b.length+' en difficulté':''}</small></h3>${mini(jf)}</div>`; });
-    return s;
-  }
-  let s=`<h2>Les dieux</h2>`;
-  ['joueur',...DIEUX_PNJ.map(d=>d.id)].forEach(id=>{const n=S.habs.filter(h=>h.dieu===id).length; s+=`<div class="row"><span>${nomDieu(id)}${id==='joueur'?' (toi)':''}<small>${id==='joueur'?[ELEMENTS[S.dieu.element],VALEURS[S.dieu.valeur],MANIERES[S.dieu.maniere]].join(' · ')+' · '+(S.caractere<-1?'sombre':'lumineux'):DIEUX_PNJ.find(d=>d.id===id).titre}</small></span><b>${n}</b></div>`});
-  s+=`<h2>Les quartiers</h2>`;
-  QUARTIERS.forEach((qn,qi)=>{ const j=jaugesQ(qi), hs=habsDu(qi); s+=`<div class="carte" onclick="vue.q=${qi};render()"><h3>${Maj(qn)}<small>${hs.filter(h=>h.dieu==='joueur').length}/${hs.length} te suivent${disciples().some(d=>fam(d).quartier===qi)?' · ✧':''}</small></h3>${mini(j)}</div>`; });
-  s+=`<p style="font-size:12px;color:var(--quiet)">Barres : nourriture, sécurité, santé, richesse. Tu vois tout ; tu n'agis que par le prophète.</p>`;
-  return s;
-}
-function renderChronique(){
-  let s='<h2>Chronique</h2>'+S.chronique.map(l=>`<div class="log ${l.imp?'imp':''}"><small>${l.q}</small>${l.t}</div>`).join('');
-  s+=`<div class="test">Outils de test — une tranche = 10 minutes réelles, 6 tranches = 1 jour.<br>
-  <button onclick="testAv(1)">+1 tranche</button><button onclick="testAv(6)">+1 jour</button><button onclick="testAv(42)">+7 jours</button><button onclick="S.ferveur+=20;save();render()">+20 ferveur</button><button onclick="if(confirm('Tout effacer et recommencer ?')){localStorage.removeItem(SAVE_KEY);S=null;render()}">Recommencer</button></div>`;
-  return s;
-}
-function testAv(n){for(let i=0;i<n;i++)avancer(); save(); render();}
-function renderSetup(){
-  const opts=o=>Object.entries(o).map(([k,v])=>`<option value="${k}">${v}</option>`).join('');
-  app.innerHTML=`<div class="setup">
-    <h1 style="margin:0 0 4px">Le jeu du dieu</h1>
-    <p style="color:var(--quiet);font-size:14px">Une ville de deux cents âmes. Tu ne la verras que par les yeux d'un seul homme, ton prophète, et tu n'agiras que par ses mains.</p>
-    <label>Ton nom</label><input id="nom" placeholder="Ilyra, Vorn, Aëlis…" maxlength="18">
-    <label>Ton élément</label><select id="element">${opts(ELEMENTS)}</select>
-    <label>Ta valeur</label><select id="valeur">${opts(VALEURS)}</select>
-    <label>Ta manière</label><select id="maniere">${opts(MANIERES)}</select>
-    <button class="go" onclick="demarrer()">Naître</button>
-    <p style="color:var(--quiet);font-size:12px;margin-top:20px">Prototype v${VERSION}. Le monde avance toutes les dix minutes, même quand tu n'es pas là.</p>
+  <div class="scene">
+    <div class="portrait">${n.qui==='monde'?'<div class="vide"></div>':portrait}<button class="menu" onclick="if(confirm('Recommencer l\\'histoire depuis le début ?'))recommencer()">↻</button>${n.qui!=='monde'?`<div class="etat">foi ${S.foi}${S.ombre>=3?' · ombre':''}</div>`:''}</div>
+    <div class="dialogue">
+      <div class="qui ${n.qui==='monde'?'monde':''}">${n.qui==='monde'?'— le monde —':qui}</div>
+      <div class="texte">${n.t.map(p=>`<p>${T(p)}</p>`).join('')}</div>
+      <div class="choix">${n.c.map((c,i)=>`<button class="${/^(Continuer|Jour|Écouter|Voir)/.test(c.l)?'suite':''}" onclick="choisir(${i})">${T(c.l)}${c.s?`<small>${T(c.s)}</small>`:''}</button>`).join('')}</div>
+    </div>
   </div>`;
+  if(delta){ ['ferveur','croyants'].forEach(k=>{ if(delta[k]){ const el=document.getElementById('c-'+k); el.classList.add('bump'); setTimeout(()=>el.classList.remove('bump'),300); const sp=document.createElement('span'); sp.className='delta'; sp.style.color=delta[k]>0?'var(--good)':'var(--bad)'; sp.textContent=(delta[k]>0?'+':'')+delta[k]; el.style.position='relative'; el.appendChild(sp); setTimeout(()=>sp.remove(),1300); } }); }
+  document.querySelector('.dialogue').scrollTop=0;
 }
-function demarrer(){ const nom=document.getElementById('nom').value.trim()||'Sans-Nom'; nouveauMonde({nom, element:element.value, valeur:valeur.value, maniere:maniere.value}); tab='prophete'; render(); }
+function renderFin(n){
+  app.innerHTML=`<header><div class="nom">${S.nom}<small>Fin de la première histoire</small></div><div class="compteurs"><div class="cpt gold"><b>${S.ferveur}</b><small>ferveur</small></div><div class="cpt rose"><b>${S.croyants}</b><small>croyants</small></div></div></header>
+  <div class="fin"><h1>${n.titre}</h1><p>${T(n.texte)}</p>
+  <p style="color:var(--quiet);font-size:13px">Foi finale du prophète : ${S.foi}. Part d'ombre : ${S.ombre}. ${S.mort.length?'Morts : '+S.mort.join(', ')+'.':'Aucun mort.'}</p>
+  <button onclick="recommencer()">Recommencer avec un autre nom</button></div>`;
+}
+function renderSetup(){
+  const anc = localStorage.getItem(SAVE_KEY);
+  app.innerHTML=`<div class="setup">
+    <h1>Le jeu du dieu</h1>
+    <p>Tu viens de naître. Tu n'as pas de temple, pas de prêtre, et personne ne connaît ton nom. Quelque part dans une ville de deux mille âmes, un homme est en train de maudire son dieu. Il va t'entendre.</p>
+    <label>Ton nom</label><input id="nom" placeholder="Ilyra, Vorn, Aëlis…" maxlength="16">
+    <button class="go" onclick="demarrer()">Naître</button>
+    <p style="font-size:12px;margin-top:24px">Un jeu narratif. Quinze journées, des choix qui coûtent, et un dieu qui devient ce que tu en fais. Version ${VERSION}.</p>
+  </div>`;
+  setTimeout(()=>{const i=document.getElementById('nom'); if(i) i.focus();},100);
+}
+function demarrer(){ const nom=document.getElementById('nom').value.trim(); if(!nom) return alert('Il te faut un nom.'); S=def(); S.nom=nom; save(); render(); }
 
-(function(){
-  try{ const s=localStorage.getItem(SAVE_KEY); if(s){ S=JSON.parse(s); if(S.version!==VERSION) S=null; } }catch(e){ S=null; }
-  if(S){ const n=rattraper(); if(n) setTimeout(()=>toast(`${n} tranche(s) ont passé pendant ton absence.`),300); }
-  render();
-  setInterval(()=>{ if(S && rattraper()) render(); }, 30000);
-  document.addEventListener('visibilitychange',()=>{ if(!document.hidden && S && rattraper()) render(); });
-})();
+(function(){ try{ const s=localStorage.getItem(SAVE_KEY); if(s){ S=JSON.parse(s); if(S.version!==VERSION) S=null; } }catch(e){ S=null; } render(); })();
 </script>
 </body>
 </html>
